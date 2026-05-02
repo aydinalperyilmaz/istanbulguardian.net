@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a1428">
+  <meta name="description" content="Istanbul Guardian — Your trusted local guide in Istanbul">
+
+  <title>Istanbul Guardian</title>
+
+  <!-- Stiller -->
+  <link rel="stylesheet" href="assets/style.css">
+
+  <!-- Favicon (sonradan değiştirilecek) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%E2%9A%93%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Üst nav -->
+  <nav class="ig-nav">
+    <div class="ig-nav-brand">
+      Istanbul <span>Guardian</span>
+    </div>
+
+    <div class="ig-lang-switcher" id="langSwitcher">
+      <button class="ig-lang-btn" data-lang="tr">TR</button>
+      <button class="ig-lang-btn" data-lang="en">EN</button>
+      <button class="ig-lang-btn" data-lang="ar">عر</button>
+      <button class="ig-lang-btn" data-lang="ru">RU</button>
+    </div>
+  </nav>
+
+  <!-- Ana içerik -->
+  <main class="ig-page">
+    <div class="ig-container ig-container-sm">
+
+      <!-- Hero -->
+      <section class="ig-text-center ig-fade-in">
+        <div class="ig-overline ig-mb-md">⚓ ISTANBUL GUARDIAN</div>
+
+        <h1 class="ig-display ig-mb-lg">
+          <span data-i18n="welcome.title">Welcome</span>
+        </h1>
+
+        <p class="ig-tagline ig-mb-2xl" id="hotelGreeting">
+          <span data-i18n="app.tagline">Your trusted local guide in Istanbul</span>
+        </p>
+      </section>
+
+      <!-- Hotel info card (eğer otel parametresi varsa) -->
+      <div id="hotelInfo" class="ig-card ig-text-center ig-mb-xl ig-hidden ig-fade-in ig-fade-in-delay-1">
+        <div class="ig-overline ig-mb-sm">YOU ARE STAYING AT</div>
+        <h3 id="hotelName" class="ig-text-gold">—</h3>
+        <p id="hotelDistrict" class="ig-text-soft ig-mt-sm">—</p>
+      </div>
+
+      <!-- Auth form -->
+      <div class="ig-card ig-fade-in ig-fade-in-delay-2">
+
+        <!-- Tab buttons -->
+        <div class="ig-flex ig-gap-sm ig-mb-lg">
+          <button class="ig-btn ig-btn-ghost ig-btn-block tab-btn active" data-tab="signin">
+            <span data-i18n="auth.signin">Sign in</span>
+          </button>
+          <button class="ig-btn ig-btn-ghost ig-btn-block tab-btn" data-tab="signup">
+            <span data-i18n="auth.signup">Sign up</span>
+          </button>
+        </div>
+
+        <!-- Sign in form -->
+        <form id="signinForm" class="auth-form active">
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="auth.email">Email</label>
+            <input type="email" class="ig-input" id="signinEmail" required autocomplete="email">
+          </div>
+
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="auth.password">Password</label>
+            <input type="password" class="ig-input" id="signinPassword" required autocomplete="current-password">
+          </div>
+
+          <div id="signinError" class="ig-error ig-hidden"></div>
+
+          <button type="submit" class="ig-btn ig-btn-primary ig-btn-block ig-btn-large ig-mt-lg">
+            <span data-i18n="auth.continue">Continue</span>
+          </button>
+        </form>
+
+        <!-- Sign up form -->
+        <form id="signupForm" class="auth-form">
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="auth.fullname">Full name</label>
+            <input type="text" class="ig-input" id="signupName" required autocomplete="name">
+          </div>
+
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="auth.email">Email</label>
+            <input type="email" class="ig-input" id="signupEmail" required autocomplete="email">
+          </div>
+
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="auth.phone">Phone</label>
+            <input type="tel" class="ig-input" id="signupPhone" required autocomplete="tel" placeholder="+90 555 555 5555">
+          </div>
+
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="auth.password">Password</label>
+            <input type="password" class="ig-input" id="signupPassword" required autocomplete="new-password" minlength="6">
+          </div>
+
+          <div id="signupError" class="ig-error ig-hidden"></div>
+
+          <button type="submit" class="ig-btn ig-btn-primary ig-btn-block ig-btn-large ig-mt-lg">
+            <span data-i18n="auth.continue">Continue</span>
+          </button>
+        </form>
+
+      </div>
+
+      <p class="ig-text-center ig-text-dim ig-mt-2xl" style="font-size:0.75rem;">
+        © 2026 Bosphorus Global · KVKK · Privacy
+      </p>
+
+    </div>
+  </main>
+
+  <!-- Loading overlay -->
+  <div id="loadingOverlay" class="ig-loading-overlay ig-hidden">
+    <div class="ig-loader ig-loader-large"></div>
+  </div>
+
+  <!-- Sayfa-özel ek stiller -->
+  <style>
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+    .tab-btn.active { border-color: var(--ig-gold); color: var(--ig-gold); }
+  </style>
+
+  <!-- Scripts -->
+  <script src="assets/i18n.js"></script>
+  <script src="assets/supabase.js"></script>
+
+  <script>
+    // ========================================================================
+    // INDEX.HTML — Turist Landing Sayfası
+    // ========================================================================
+
+    document.addEventListener('DOMContentLoaded', async () => {
+
+      // 1) URL'den otel slug'ını al (örn: ?h=sultan-hotel)
+      const urlParams = new URLSearchParams(window.location.search);
+      const hotelSlug = urlParams.get('h');
+
+      // localStorage'a kaydet (sonraki sayfalar kullanır)
+      if (hotelSlug) {
+        localStorage.setItem('ig_hotel_slug', hotelSlug);
+        await loadHotelInfo(hotelSlug);
+      }
+
+      // 2) Aktif dil butonunu işaretle
+      const currentLang = IG.getLang();
+      document.querySelectorAll('.ig-lang-btn').forEach(btn => {
+        if (btn.dataset.lang === currentLang) {
+          btn.classList.add('active');
+        }
+      });
+
+      // 3) Dil değiştirme
+      document.querySelectorAll('.ig-lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          IG.setLang(btn.dataset.lang);
+        });
+      });
+
+      // 4) Tab geçişi
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tab = btn.dataset.tab;
+
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+          document.getElementById(tab + 'Form').classList.add('active');
+
+          hideErrors();
+        });
+      });
+
+      // 5) Eğer kullanıcı zaten giriş yapmışsa, app.html'e yönlendir
+      try {
+        const user = await IG.auth.getUser();
+        if (user) {
+          window.location.href = 'app.html';
+          return;
+        }
+      } catch (e) {
+        // Kullanıcı yok, devam
+      }
+
+      // 6) Form submit'leri
+      document.getElementById('signinForm').addEventListener('submit', handleSignIn);
+      document.getElementById('signupForm').addEventListener('submit', handleSignUp);
+
+    });
+
+    // ========================================================================
+    // OTEL BİLGİSİNİ YÜKLE
+    // ========================================================================
+    async function loadHotelInfo(slug) {
+      try {
+        const sb = await initSupabase();
+        if (!sb) return;
+
+        const { data: hotel, error } = await sb
+          .from('hotels')
+          .select('name, district')
+          .eq('slug', slug)
+          .eq('is_active', true)
+          .single();
+
+        if (error || !hotel) {
+          console.warn('Otel bulunamadı:', slug);
+          return;
+        }
+
+        document.getElementById('hotelName').textContent = hotel.name;
+        document.getElementById('hotelDistrict').textContent = hotel.district;
+        document.getElementById('hotelInfo').classList.remove('ig-hidden');
+      } catch (err) {
+        console.error('Otel bilgisi yüklenemedi:', err);
+      }
+    }
+
+    // ========================================================================
+    // SIGN IN
+    // ========================================================================
+    async function handleSignIn(e) {
+      e.preventDefault();
+      hideErrors();
+      showLoading();
+
+      const email = document.getElementById('signinEmail').value.trim();
+      const password = document.getElementById('signinPassword').value;
+
+      try {
+        await IG.auth.signIn(email, password);
+        window.location.href = 'app.html';
+      } catch (err) {
+        hideLoading();
+        showError('signinError', err.message || IG.t('error.generic'));
+      }
+    }
+
+    // ========================================================================
+    // SIGN UP
+    // ========================================================================
+    async function handleSignUp(e) {
+      e.preventDefault();
+      hideErrors();
+
+      const fullName = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const phone = document.getElementById('signupPhone').value.trim();
+      const password = document.getElementById('signupPassword').value;
+
+      // Basit validasyon
+      if (phone.length < 7) {
+        showError('signupError', IG.t('error.invalidPhone'));
+        return;
+      }
+
+      showLoading();
+
+      try {
+        await IG.auth.signUp(email, password, fullName, phone, IG.getLang());
+
+        // Kullanıcı kaydoldu, profili oluştur (RPC ile)
+        try {
+          await IG.rpc('register_tourist', {
+            p_full_name: fullName,
+            p_phone: phone,
+            p_email: email,
+            p_lang: IG.getLang()
+          });
+        } catch (rpcErr) {
+          console.warn('Profil oluşturulamadı, app.html\'de tekrar denenecek:', rpcErr);
+        }
+
+        window.location.href = 'app.html';
+      } catch (err) {
+        hideLoading();
+        showError('signupError', err.message || IG.t('error.generic'));
+      }
+    }
+
+    // ========================================================================
+    // YARDIMCI FONKSİYONLAR
+    // ========================================================================
+    function showError(elementId, message) {
+      const el = document.getElementById(elementId);
+      el.textContent = message;
+      el.classList.remove('ig-hidden');
+    }
+
+    function hideErrors() {
+      document.querySelectorAll('.ig-error').forEach(el => el.classList.add('ig-hidden'));
+    }
+
+    function showLoading() {
+      document.getElementById('loadingOverlay').classList.remove('ig-hidden');
+    }
+
+    function hideLoading() {
+      document.getElementById('loadingOverlay').classList.add('ig-hidden');
+    }
+  </script>
+
+</body>
+</html>
