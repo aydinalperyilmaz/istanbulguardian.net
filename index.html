@@ -2,317 +2,1075 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a1428">
-  <meta name="description" content="Istanbul Guardian — Your trusted local guide in Istanbul">
-
-  <title>Istanbul Guardian</title>
-
-  <!-- Stiller -->
+  <title>Istanbul Guardian — Your Local Concierge</title>
   <link rel="stylesheet" href="assets/style.css">
-
-  <!-- Favicon (sonradan değiştirilecek) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%E2%9A%93%3C/text%3E%3C/svg%3E">
+
+  <style>
+    body { background: var(--ig-bg); }
+
+    /* Lang switcher */
+    .lang-switcher {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.25rem;
+      z-index: 50;
+      background: rgba(10, 20, 40, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 0.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--ig-border);
+    }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--ig-text-soft);
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: var(--ig-gold);
+      color: var(--ig-bg);
+    }
+
+    /* QR-required modal */
+    .qr-required-overlay {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background:
+        linear-gradient(rgba(10, 20, 40, 0.85), rgba(10, 20, 40, 0.95)),
+        url('https://images.unsplash.com/photo-1527838832700-5059252407fa?w=1600&q=80') center/cover;
+    }
+    .qr-required-card {
+      max-width: 480px;
+      width: 100%;
+      background: var(--ig-surface);
+      border: 1px solid var(--ig-gold);
+      border-radius: var(--ig-radius-md);
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+
+    /* HERO */
+    .hero-wrapper {
+      position: relative;
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 1.5rem;
+      background:
+        linear-gradient(180deg, rgba(10, 20, 40, 0.5) 0%, rgba(10, 20, 40, 0.85) 100%),
+        url('https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1600&q=80') center/cover;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 720px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-overline {
+      font-family: var(--ig-font-display);
+      color: var(--ig-gold);
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .hero-title {
+      font-family: var(--ig-font-display);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      color: var(--ig-text);
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .hero-title em {
+      color: var(--ig-gold);
+      font-style: italic;
+    }
+
+    .hero-subtitle {
+      color: var(--ig-text-soft);
+      font-size: 1.15rem;
+      line-height: 1.6;
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hotel-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(20, 30, 50, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--ig-gold);
+      border-radius: var(--ig-radius-md);
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      max-width: 100%;
+    }
+
+    .hotel-card-icon {
+      font-size: 1.75rem;
+      flex-shrink: 0;
+    }
+
+    .hotel-card-text { text-align: left; }
+
+    .hotel-card-label {
+      font-size: 0.7rem;
+      color: var(--ig-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.15rem;
+    }
+
+    .hotel-card-name {
+      color: var(--ig-text);
+      font-family: var(--ig-font-display);
+      font-size: 1.1rem;
+    }
+
+    /* AI CTA */
+    .ai-section {
+      max-width: 720px;
+      margin: -2rem auto 0;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ai-cta {
+      display: block;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--ig-surface) 0%, var(--ig-surface-2) 100%);
+      border: 1px solid var(--ig-gold);
+      border-radius: var(--ig-radius-md);
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .ai-cta:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+    }
+
+    .ai-cta-inner {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .ai-cta-sparkle {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+    }
+
+    .ai-cta-content { flex: 1; }
+
+    .ai-cta-label {
+      font-size: 0.7rem;
+      color: var(--ig-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+
+    .ai-cta-title {
+      font-family: var(--ig-font-display);
+      font-size: 1.4rem;
+      color: var(--ig-text);
+      margin-bottom: 0.25rem;
+    }
+
+    .ai-cta-subtitle {
+      color: var(--ig-text-soft);
+      font-size: 0.9rem;
+    }
+
+    .ai-cta-arrow {
+      color: var(--ig-gold);
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    /* CATEGORIES */
+    .categories-section {
+      max-width: 1100px;
+      margin: 4rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-overline {
+      color: var(--ig-gold);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-family: var(--ig-font-display);
+      font-size: 2.25rem;
+      color: var(--ig-text);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      color: var(--ig-text-soft);
+      font-size: 1rem;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .category-card {
+      display: block;
+      text-decoration: none;
+      background: var(--ig-surface);
+      border: 1px solid var(--ig-border);
+      border-radius: var(--ig-radius-md);
+      overflow: hidden;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .category-card:hover {
+      border-color: var(--ig-gold);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(201, 169, 97, 0.15);
+    }
+
+    .category-image {
+      width: 100%;
+      height: 180px;
+      background: var(--ig-surface-2) center/cover;
+      position: relative;
+    }
+
+    .category-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10, 20, 40, 0.85) 100%);
+    }
+
+    .category-content {
+      padding: 1.25rem 1.5rem 1.5rem;
+    }
+
+    .category-title {
+      font-family: var(--ig-font-display);
+      font-size: 1.4rem;
+      color: var(--ig-text);
+      margin-bottom: 0.4rem;
+    }
+
+    .category-desc {
+      color: var(--ig-text-soft);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    /* TRUST SECTION */
+    .trust-section {
+      background: linear-gradient(135deg, var(--ig-surface) 0%, var(--ig-bg) 100%);
+      padding: 4rem 1.5rem;
+      border-top: 1px solid var(--ig-border-soft);
+      border-bottom: 1px solid var(--ig-border-soft);
+    }
+
+    .trust-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .trust-feature {
+      text-align: center;
+    }
+
+    .trust-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1rem;
+      background: rgba(201, 169, 97, 0.1);
+      border: 1px solid var(--ig-gold);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+    }
+
+    .trust-feature-title {
+      font-family: var(--ig-font-display);
+      font-size: 1.15rem;
+      color: var(--ig-text);
+      margin-bottom: 0.5rem;
+    }
+
+    .trust-feature-desc {
+      color: var(--ig-text-soft);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    /* AUTH SECTION */
+    .auth-section {
+      max-width: 480px;
+      margin: 4rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .auth-card {
+      background: var(--ig-surface);
+      border: 1px solid var(--ig-border);
+      border-radius: var(--ig-radius-md);
+      padding: 2rem;
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      background: var(--ig-bg-soft);
+      padding: 4px;
+      border-radius: 8px;
+    }
+
+    .auth-tab {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--ig-text-soft);
+      padding: 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .auth-tab.active {
+      background: var(--ig-surface);
+      color: var(--ig-gold);
+    }
+
+    /* FOOTER */
+    .footer {
+      background: var(--ig-bg);
+      border-top: 1px solid var(--ig-border-soft);
+      padding: 2.5rem 1.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: var(--ig-font-display);
+      color: var(--ig-text);
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-brand span { color: var(--ig-gold); }
+
+    .footer-tagline {
+      color: var(--ig-text-soft);
+      font-size: 0.875rem;
+      max-width: 480px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem 2rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    .footer-links a {
+      color: var(--ig-text-soft);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: var(--ig-gold); }
+
+    .footer-meta {
+      color: var(--ig-text-dim);
+      font-size: 0.75rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--ig-border-soft);
+    }
+
+    /* RTL support */
+    html[dir="rtl"] .hotel-card-text { text-align: right; }
+    html[dir="rtl"] .ai-cta-arrow { transform: scaleX(-1); }
+    html[dir="rtl"] .lang-switcher { right: auto; left: 1rem; }
+
+    @media (max-width: 720px) {
+      .hero-wrapper { min-height: 60vh; padding: 3rem 1rem; }
+      .ai-cta-inner { flex-direction: column; text-align: center; }
+      .ai-cta-arrow { display: none; }
+      .section-title { font-size: 1.75rem; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Üst nav -->
-  <nav class="ig-nav">
-    <div class="ig-nav-brand">
-      Istanbul <span>Guardian</span>
-    </div>
+  <!-- Lang switcher -->
+  <div class="lang-switcher">
+    <button class="lang-btn" data-lang="tr">TR</button>
+    <button class="lang-btn active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="ar">AR</button>
+    <button class="lang-btn" data-lang="ru">RU</button>
+  </div>
 
-    <div class="ig-lang-switcher" id="langSwitcher">
-      <button class="ig-lang-btn" data-lang="tr">TR</button>
-      <button class="ig-lang-btn" data-lang="en">EN</button>
-      <button class="ig-lang-btn" data-lang="ar">عر</button>
-      <button class="ig-lang-btn" data-lang="ru">RU</button>
-    </div>
-  </nav>
-
-  <!-- Ana içerik -->
-  <main class="ig-page">
-    <div class="ig-container ig-container-sm">
-
-      <!-- Hero -->
-      <section class="ig-text-center ig-fade-in">
-        <div class="ig-overline ig-mb-md">⚓ ISTANBUL GUARDIAN</div>
-
-        <h1 class="ig-display ig-mb-lg">
-          <span data-i18n="welcome.title">Welcome</span>
-        </h1>
-
-        <p class="ig-tagline ig-mb-2xl" id="hotelGreeting">
-          <span data-i18n="app.tagline">Your trusted local guide in Istanbul</span>
-        </p>
-      </section>
-
-      <!-- Hotel info card (eğer otel parametresi varsa) -->
-      <div id="hotelInfo" class="ig-card ig-text-center ig-mb-xl ig-hidden ig-fade-in ig-fade-in-delay-1">
-        <div class="ig-overline ig-mb-sm">YOU ARE STAYING AT</div>
-        <h3 id="hotelName" class="ig-text-gold">—</h3>
-        <p id="hotelDistrict" class="ig-text-soft ig-mt-sm">—</p>
-      </div>
-
-      <!-- Auth form -->
-      <div class="ig-card ig-fade-in ig-fade-in-delay-2">
-
-        <!-- Tab buttons -->
-        <div class="ig-flex ig-gap-sm ig-mb-lg">
-          <button class="ig-btn ig-btn-ghost ig-btn-block tab-btn active" data-tab="signin">
-            <span data-i18n="auth.signin">Sign in</span>
-          </button>
-          <button class="ig-btn ig-btn-ghost ig-btn-block tab-btn" data-tab="signup">
-            <span data-i18n="auth.signup">Sign up</span>
-          </button>
-        </div>
-
-        <!-- Sign in form -->
-        <form id="signinForm" class="auth-form active">
-          <div class="ig-form-group">
-            <label class="ig-label" data-i18n="auth.email">Email</label>
-            <input type="email" class="ig-input" id="signinEmail" required autocomplete="email">
-          </div>
-
-          <div class="ig-form-group">
-            <label class="ig-label" data-i18n="auth.password">Password</label>
-            <input type="password" class="ig-input" id="signinPassword" required autocomplete="current-password">
-          </div>
-
-          <div id="signinError" class="ig-error ig-hidden"></div>
-
-          <button type="submit" class="ig-btn ig-btn-primary ig-btn-block ig-btn-large ig-mt-lg">
-            <span data-i18n="auth.continue">Continue</span>
-          </button>
-        </form>
-
-        <!-- Sign up form -->
-        <form id="signupForm" class="auth-form">
-          <div class="ig-form-group">
-            <label class="ig-label" data-i18n="auth.fullname">Full name</label>
-            <input type="text" class="ig-input" id="signupName" required autocomplete="name">
-          </div>
-
-          <div class="ig-form-group">
-            <label class="ig-label" data-i18n="auth.email">Email</label>
-            <input type="email" class="ig-input" id="signupEmail" required autocomplete="email">
-          </div>
-
-          <div class="ig-form-group">
-            <label class="ig-label" data-i18n="auth.phone">Phone</label>
-            <input type="tel" class="ig-input" id="signupPhone" required autocomplete="tel" placeholder="+90 555 555 5555">
-          </div>
-
-          <div class="ig-form-group">
-            <label class="ig-label" data-i18n="auth.password">Password</label>
-            <input type="password" class="ig-input" id="signupPassword" required autocomplete="new-password" minlength="6">
-          </div>
-
-          <div id="signupError" class="ig-error ig-hidden"></div>
-
-          <button type="submit" class="ig-btn ig-btn-primary ig-btn-block ig-btn-large ig-mt-lg">
-            <span data-i18n="auth.continue">Continue</span>
-          </button>
-        </form>
-
-      </div>
-
-      <p class="ig-text-center ig-text-dim ig-mt-2xl" style="font-size:0.75rem;">
-        © 2026 Bosphorus Global · KVKK · Privacy
-      </p>
-
-    </div>
-  </main>
-
-  <!-- Loading overlay -->
-  <div id="loadingOverlay" class="ig-loading-overlay ig-hidden">
+  <!-- Loading -->
+  <div id="loadingState" style="min-height:100vh; display:flex; align-items:center; justify-content:center;">
     <div class="ig-loader ig-loader-large"></div>
   </div>
 
-  <!-- Sayfa-özel ek stiller -->
-  <style>
-    .auth-form { display: none; }
-    .auth-form.active { display: block; }
-    .tab-btn.active { border-color: var(--ig-gold); color: var(--ig-gold); }
-  </style>
+  <!-- ============================================== -->
+  <!-- QR REQUIRED (no hotel slug in URL) -->
+  <!-- ============================================== -->
+  <div id="qrRequiredView" class="ig-hidden qr-required-overlay">
+    <div class="qr-required-card">
+      <div style="font-size:3.5rem; margin-bottom:1rem;">📱</div>
+      <h2 data-i18n="qr_title" style="margin-bottom:1rem;">Welcome to Istanbul Guardian</h2>
+      <p class="ig-text-soft" data-i18n="qr_desc" style="margin-bottom:2rem; font-size:1rem; line-height:1.6;">
+        This service is available exclusively to guests of our partner hotels.
+        Please scan the QR code provided in your hotel room or lobby.
+      </p>
+      <div style="background:var(--ig-bg-soft); padding:1rem; border-radius:8px; margin-bottom:2rem;">
+        <p class="ig-text-soft" data-i18n="qr_help" style="font-size:.85rem; margin:0;">
+          Can't find the QR code? Ask your hotel reception or contact us.
+        </p>
+      </div>
+      <a href="mailto:support@istanbulguardian.net" class="ig-btn ig-btn-primary ig-btn-block" data-i18n="qr_contact">
+        Contact support
+      </a>
+      <p style="margin-top:1.5rem; font-size:.8rem; color:var(--ig-text-dim);">
+        <a href="hotel.html" style="color:var(--ig-gold); text-decoration:none;" data-i18n="qr_partner">
+          Are you a hotel partner? →
+        </a>
+      </p>
+    </div>
+  </div>
 
-  <!-- Scripts -->
-  <script src="assets/i18n.js"></script>
+  <!-- ============================================== -->
+  <!-- MAIN VIEW (with hotel slug) -->
+  <!-- ============================================== -->
+  <div id="mainView" class="ig-hidden">
+
+    <!-- HERO -->
+    <section class="hero-wrapper">
+      <div class="hero-content">
+        <div class="hero-overline" data-i18n="hero_overline">Your private guide in Istanbul</div>
+
+        <h1 class="hero-title">
+          <span data-i18n="hero_title_1">Welcome to</span>
+          <em data-i18n="hero_title_2">Istanbul</em>
+        </h1>
+
+        <p class="hero-subtitle" data-i18n="hero_subtitle">
+          From hammam to history, transfers to top restaurants — booked in seconds, transparent prices, zero hassle.
+        </p>
+
+        <div id="hotelCard" class="hotel-card">
+          <div class="hotel-card-icon">🏨</div>
+          <div class="hotel-card-text">
+            <div class="hotel-card-label" data-i18n="hotel_label">YOU ARE STAYING AT</div>
+            <div class="hotel-card-name" id="hotelName">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI CTA -->
+    <section class="ai-section">
+      <a href="#" id="aiCta" class="ai-cta">
+        <div class="ai-cta-inner">
+          <div class="ai-cta-sparkle">✨</div>
+          <div class="ai-cta-content">
+            <div class="ai-cta-label" data-i18n="ai_label">AI CONCIERGE</div>
+            <div class="ai-cta-title" data-i18n="ai_title">What do you want to do in Istanbul?</div>
+            <div class="ai-cta-subtitle" data-i18n="ai_subtitle">Tell me your mood, I'll plan your day.</div>
+          </div>
+          <div class="ai-cta-arrow">→</div>
+        </div>
+      </a>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="categories-section">
+      <div class="section-header">
+        <div class="section-overline" data-i18n="cat_overline">EXPLORE</div>
+        <h2 class="section-title" data-i18n="cat_title">Curated experiences</h2>
+        <p class="section-subtitle" data-i18n="cat_subtitle">Hand-picked local services, fully transparent pricing</p>
+      </div>
+
+      <div class="categories-grid">
+
+        <a href="#" data-cat="hammam" class="category-card">
+          <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600&q=80');"></div>
+          <div class="category-content">
+            <h3 class="category-title" data-i18n="cat_hammam_title">Hammam & Spa</h3>
+            <p class="category-desc" data-i18n="cat_hammam_desc">Authentic Turkish bath experience in historic hammams</p>
+          </div>
+        </a>
+
+        <a href="#" data-cat="tour" class="category-card">
+          <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1604941487991-b5fa4e8d4f1c?w=600&q=80');"></div>
+          <div class="category-content">
+            <h3 class="category-title" data-i18n="cat_tour_title">Tours</h3>
+            <p class="category-desc" data-i18n="cat_tour_desc">Walking tours, Bosphorus cruises, day trips</p>
+          </div>
+        </a>
+
+        <a href="#" data-cat="transfer" class="category-card">
+          <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1502877338535-766e1452684a?w=600&q=80');"></div>
+          <div class="category-content">
+            <h3 class="category-title" data-i18n="cat_transfer_title">Transfer</h3>
+            <p class="category-desc" data-i18n="cat_transfer_desc">Airport pickups, private drivers, intercity rides</p>
+          </div>
+        </a>
+
+        <a href="#" data-cat="restaurant" class="category-card">
+          <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80');"></div>
+          <div class="category-content">
+            <h3 class="category-title" data-i18n="cat_restaurant_title">Restaurants</h3>
+            <p class="category-desc" data-i18n="cat_restaurant_desc">Local favorites, rooftop dining, hidden gems</p>
+          </div>
+        </a>
+
+        <a href="#" data-cat="health" class="category-card">
+          <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?w=600&q=80');"></div>
+          <div class="category-content">
+            <h3 class="category-title" data-i18n="cat_health_title">Health Tourism</h3>
+            <p class="category-desc" data-i18n="cat_health_desc">Hair transplant, dental, aesthetic procedures</p>
+          </div>
+        </a>
+
+        <a href="#" data-cat="nightlife" class="category-card">
+          <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&q=80');"></div>
+          <div class="category-content">
+            <h3 class="category-title" data-i18n="cat_nightlife_title">Nightlife</h3>
+            <p class="category-desc" data-i18n="cat_nightlife_desc">Rooftop bars, clubs, late-night experiences</p>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- TRUST -->
+    <section class="trust-section">
+      <div class="trust-inner">
+        <div class="section-header">
+          <div class="section-overline" data-i18n="trust_overline">WHY ISTANBUL GUARDIAN</div>
+          <h2 class="section-title" data-i18n="trust_title">Locals you can trust</h2>
+          <p class="section-subtitle" data-i18n="trust_subtitle">No hidden fees, no tourist traps, no surprises</p>
+        </div>
+
+        <div class="trust-grid">
+          <div class="trust-feature">
+            <div class="trust-icon">🔍</div>
+            <h3 class="trust-feature-title" data-i18n="trust_1_title">Fully Transparent</h3>
+            <p class="trust-feature-desc" data-i18n="trust_1_desc">See exactly where every penny goes — provider, hotel, platform.</p>
+          </div>
+          <div class="trust-feature">
+            <div class="trust-icon">⭐</div>
+            <h3 class="trust-feature-title" data-i18n="trust_2_title">Hand-Picked Partners</h3>
+            <p class="trust-feature-desc" data-i18n="trust_2_desc">Every provider personally vetted. Real experiences, real reviews.</p>
+          </div>
+          <div class="trust-feature">
+            <div class="trust-icon">🌍</div>
+            <h3 class="trust-feature-title" data-i18n="trust_3_title">In Your Language</h3>
+            <p class="trust-feature-desc" data-i18n="trust_3_desc">Service in English, Turkish, Arabic, and Russian — wherever you're from.</p>
+          </div>
+          <div class="trust-feature">
+            <div class="trust-icon">🔒</div>
+            <h3 class="trust-feature-title" data-i18n="trust_4_title">Secure Payment</h3>
+            <p class="trust-feature-desc" data-i18n="trust_4_desc">All transactions via PayTR. Your card data is never stored on our servers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTH -->
+    <section class="auth-section">
+      <div class="auth-card">
+        <div class="section-header" style="margin-bottom:1.5rem;">
+          <div class="section-overline" data-i18n="auth_overline">GET STARTED</div>
+          <h2 class="section-title" style="font-size:1.5rem;" data-i18n="auth_title">Create account or sign in</h2>
+        </div>
+
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="signupTab" data-i18n="auth_signup">Sign up</button>
+          <button class="auth-tab" id="signinTab" data-i18n="auth_signin">Sign in</button>
+        </div>
+
+        <!-- SIGN UP -->
+        <form id="signupForm">
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="form_name">Full name</label>
+            <input type="text" class="ig-input" id="suName" required>
+          </div>
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="form_email">Email</label>
+            <input type="email" class="ig-input" id="suEmail" required autocomplete="email">
+          </div>
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="form_phone">Phone</label>
+            <input type="tel" class="ig-input" id="suPhone" placeholder="+90 555 123 4567">
+          </div>
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="form_password">Password</label>
+            <input type="password" class="ig-input" id="suPassword" required minlength="6" autocomplete="new-password">
+          </div>
+          <div id="suError" class="ig-error ig-hidden ig-mb-md"></div>
+          <button type="submit" class="ig-btn ig-btn-primary ig-btn-block" id="suSubmit" data-i18n="form_continue">Continue</button>
+        </form>
+
+        <!-- SIGN IN -->
+        <form id="signinForm" class="ig-hidden">
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="form_email">Email</label>
+            <input type="email" class="ig-input" id="siEmail" required autocomplete="username">
+          </div>
+          <div class="ig-form-group">
+            <label class="ig-label" data-i18n="form_password">Password</label>
+            <input type="password" class="ig-input" id="siPassword" required autocomplete="current-password">
+          </div>
+          <div id="siError" class="ig-error ig-hidden ig-mb-md"></div>
+          <button type="submit" class="ig-btn ig-btn-primary ig-btn-block" id="siSubmit" data-i18n="form_continue">Continue</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-brand">
+        ⚓ Istanbul <span>Guardian</span>
+      </div>
+      <p class="footer-tagline" data-i18n="footer_tagline">
+        Your trusted local concierge. Bringing the best of Istanbul to your fingertips.
+      </p>
+      <div class="footer-links">
+        <a href="mailto:support@istanbulguardian.net" data-i18n="footer_contact">Contact</a>
+        <a href="#" onclick="alert('KVKK metni yakında'); return false;" data-i18n="footer_privacy">Privacy</a>
+        <a href="#" onclick="alert('Şartlar yakında'); return false;" data-i18n="footer_terms">Terms</a>
+        <a href="hotel.html" data-i18n="footer_hotel_partners">Hotel Partners</a>
+      </div>
+      <p class="footer-meta">
+        © 2026 Bosphorus Global · KVKK uyumlu · PayTR ile güvenli ödeme
+      </p>
+    </footer>
+
+  </div>
+
   <script src="assets/supabase.js"></script>
-
   <script>
-    // ========================================================================
-    // INDEX.HTML — Turist Landing Sayfası
-    // ========================================================================
-
-    document.addEventListener('DOMContentLoaded', async () => {
-
-      // 1) URL'den otel slug'ını al (örn: ?h=sultan-hotel)
-      const urlParams = new URLSearchParams(window.location.search);
-      const hotelSlug = urlParams.get('h');
-
-      // localStorage'a kaydet (sonraki sayfalar kullanır)
-      if (hotelSlug) {
-        localStorage.setItem('ig_hotel_slug', hotelSlug);
-        await loadHotelInfo(hotelSlug);
+    // ===========================================================
+    // I18N — 4 dil
+    // ===========================================================
+    const I18N = {
+      en: {
+        qr_title: 'Welcome to Istanbul Guardian',
+        qr_desc: 'This service is available exclusively to guests of our partner hotels. Please scan the QR code provided in your hotel room or lobby.',
+        qr_help: "Can't find the QR code? Ask your hotel reception.",
+        qr_contact: 'Contact support',
+        qr_partner: 'Are you a hotel partner? →',
+        hero_overline: 'Your private guide in Istanbul',
+        hero_title_1: 'Welcome to', hero_title_2: 'Istanbul',
+        hero_subtitle: 'From hammam to history, transfers to top restaurants — booked in seconds, transparent prices, zero hassle.',
+        hotel_label: 'YOU ARE STAYING AT',
+        ai_label: 'AI CONCIERGE',
+        ai_title: 'What do you want to do in Istanbul?',
+        ai_subtitle: "Tell me your mood, I'll plan your day.",
+        cat_overline: 'EXPLORE',
+        cat_title: 'Curated experiences',
+        cat_subtitle: 'Hand-picked local services, fully transparent pricing',
+        cat_hammam_title: 'Hammam & Spa', cat_hammam_desc: 'Authentic Turkish bath experience in historic hammams',
+        cat_tour_title: 'Tours', cat_tour_desc: 'Walking tours, Bosphorus cruises, day trips',
+        cat_transfer_title: 'Transfer', cat_transfer_desc: 'Airport pickups, private drivers, intercity rides',
+        cat_restaurant_title: 'Restaurants', cat_restaurant_desc: 'Local favorites, rooftop dining, hidden gems',
+        cat_health_title: 'Health Tourism', cat_health_desc: 'Hair transplant, dental, aesthetic procedures',
+        cat_nightlife_title: 'Nightlife', cat_nightlife_desc: 'Rooftop bars, clubs, late-night experiences',
+        trust_overline: 'WHY ISTANBUL GUARDIAN',
+        trust_title: 'Locals you can trust',
+        trust_subtitle: 'No hidden fees, no tourist traps, no surprises',
+        trust_1_title: 'Fully Transparent', trust_1_desc: 'See exactly where every penny goes — provider, hotel, platform.',
+        trust_2_title: 'Hand-Picked Partners', trust_2_desc: 'Every provider personally vetted. Real experiences, real reviews.',
+        trust_3_title: 'In Your Language', trust_3_desc: 'Service in English, Turkish, Arabic, and Russian — wherever you\'re from.',
+        trust_4_title: 'Secure Payment', trust_4_desc: 'All transactions via PayTR. Your card data is never stored.',
+        auth_overline: 'GET STARTED',
+        auth_title: 'Create account or sign in',
+        auth_signup: 'Sign up', auth_signin: 'Sign in',
+        form_name: 'Full name', form_email: 'Email', form_phone: 'Phone', form_password: 'Password',
+        form_continue: 'Continue',
+        footer_tagline: 'Your trusted local concierge. Bringing the best of Istanbul to your fingertips.',
+        footer_contact: 'Contact', footer_privacy: 'Privacy', footer_terms: 'Terms', footer_hotel_partners: 'Hotel Partners'
+      },
+      tr: {
+        qr_title: 'Istanbul Guardian\'a hoş geldiniz',
+        qr_desc: 'Bu hizmet sadece partner otellerimizin misafirleri için kullanılabilir. Lütfen otelinizin odasında veya lobisinde bulunan QR kodunu tarayın.',
+        qr_help: 'QR kodunu bulamıyor musunuz? Otel resepsiyonuna danışın.',
+        qr_contact: 'Destek ile iletişim',
+        qr_partner: 'Otel partneri misiniz? →',
+        hero_overline: 'İstanbul\'daki özel rehberiniz',
+        hero_title_1: 'Hoş geldiniz', hero_title_2: 'İstanbul',
+        hero_subtitle: 'Hamamdan tarihe, transferden en iyi restoranlara — saniyeler içinde rezervasyon, şeffaf fiyatlar, sıfır karmaşa.',
+        hotel_label: 'KONAKLADIĞINIZ OTEL',
+        ai_label: 'AI REHBER',
+        ai_title: 'İstanbul\'da ne yapmak istiyorsunuz?',
+        ai_subtitle: 'Ruh halinizi söyleyin, gününüzü planlayayım.',
+        cat_overline: 'KEŞFEDİN',
+        cat_title: 'Özenle seçilmiş deneyimler',
+        cat_subtitle: 'Elden seçilmiş yerel hizmetler, tamamen şeffaf fiyatlandırma',
+        cat_hammam_title: 'Hamam & Spa', cat_hammam_desc: 'Tarihi hamamlarda gerçek Türk hamamı deneyimi',
+        cat_tour_title: 'Turlar', cat_tour_desc: 'Yürüyüş turları, Boğaz turu, günlük geziler',
+        cat_transfer_title: 'Transfer', cat_transfer_desc: 'Havalimanı transferi, özel şoför, şehirler arası',
+        cat_restaurant_title: 'Restoranlar', cat_restaurant_desc: 'Yerel favoriler, çatı katı, gizli mekanlar',
+        cat_health_title: 'Sağlık Turizmi', cat_health_desc: 'Saç ekimi, diş, estetik işlemler',
+        cat_nightlife_title: 'Gece Hayatı', cat_nightlife_desc: 'Çatı barlar, kulüpler, gece deneyimleri',
+        trust_overline: 'NEDEN ISTANBUL GUARDIAN',
+        trust_title: 'Güvenebileceğiniz yerli rehberler',
+        trust_subtitle: 'Gizli ücret yok, turist tuzağı yok, sürpriz yok',
+        trust_1_title: 'Tam Şeffaflık', trust_1_desc: 'Her kuruşun nereye gittiğini görün — sağlayıcı, otel, platform.',
+        trust_2_title: 'Seçilmiş Partnerler', trust_2_desc: 'Her sağlayıcı tek tek incelendi. Gerçek deneyimler, gerçek yorumlar.',
+        trust_3_title: 'Dilinizde Hizmet', trust_3_desc: 'İngilizce, Türkçe, Arapça ve Rusça — nereden olursanız olun.',
+        trust_4_title: 'Güvenli Ödeme', trust_4_desc: 'Tüm işlemler PayTR ile. Kart bilgileriniz sunucularımızda saklanmaz.',
+        auth_overline: 'BAŞLAYIN',
+        auth_title: 'Hesap oluşturun veya giriş yapın',
+        auth_signup: 'Kayıt ol', auth_signin: 'Giriş yap',
+        form_name: 'Ad Soyad', form_email: 'E-posta', form_phone: 'Telefon', form_password: 'Şifre',
+        form_continue: 'Devam et',
+        footer_tagline: 'Güvenilir yerel rehberiniz. İstanbul\'un en iyilerini parmaklarınızın ucuna getiriyoruz.',
+        footer_contact: 'İletişim', footer_privacy: 'Gizlilik', footer_terms: 'Şartlar', footer_hotel_partners: 'Otel Partnerleri'
+      },
+      ar: {
+        qr_title: 'مرحباً بكم في إسطنبول جارديان',
+        qr_desc: 'هذه الخدمة متاحة حصرياً لضيوف فنادقنا الشريكة. الرجاء مسح رمز QR المتوفر في غرفة الفندق أو الردهة.',
+        qr_help: 'لا يمكنك العثور على رمز QR؟ اسأل استقبال الفندق.',
+        qr_contact: 'تواصل مع الدعم',
+        qr_partner: 'هل أنت شريك فندقي؟ ←',
+        hero_overline: 'مرشدك الخاص في إسطنبول',
+        hero_title_1: 'مرحباً بكم في', hero_title_2: 'إسطنبول',
+        hero_subtitle: 'من الحمام إلى التاريخ، من النقل إلى أفضل المطاعم — حجز في ثوانٍ، أسعار شفافة، بلا مشاكل.',
+        hotel_label: 'تقيم في',
+        ai_label: 'كونسيرج الذكي',
+        ai_title: 'ماذا تريد أن تفعل في إسطنبول؟',
+        ai_subtitle: 'أخبرني بمزاجك وسأخطط ليومك.',
+        cat_overline: 'استكشف',
+        cat_title: 'تجارب منتقاة',
+        cat_subtitle: 'خدمات محلية مختارة بعناية، أسعار شفافة تماماً',
+        cat_hammam_title: 'الحمام والسبا', cat_hammam_desc: 'تجربة الحمام التركي الأصيل في حمامات تاريخية',
+        cat_tour_title: 'الجولات', cat_tour_desc: 'جولات سير، رحلات البوسفور، رحلات يومية',
+        cat_transfer_title: 'النقل', cat_transfer_desc: 'استقبال المطار، سائقون خاصون، رحلات بين المدن',
+        cat_restaurant_title: 'المطاعم', cat_restaurant_desc: 'الأماكن المفضلة محلياً، مطاعم على السطح، أماكن خفية',
+        cat_health_title: 'السياحة الصحية', cat_health_desc: 'زراعة الشعر، الأسنان، الإجراءات التجميلية',
+        cat_nightlife_title: 'الحياة الليلية', cat_nightlife_desc: 'بارات على السطح، نوادي، تجارب ليلية',
+        trust_overline: 'لماذا إسطنبول جارديان',
+        trust_title: 'مرشدون محليون يمكنك الوثوق بهم',
+        trust_subtitle: 'لا رسوم خفية، لا فخاخ سياحية، لا مفاجآت',
+        trust_1_title: 'شفافية كاملة', trust_1_desc: 'شاهد بالضبط أين تذهب كل ليرة — للمزود، الفندق، المنصة.',
+        trust_2_title: 'شركاء منتقون', trust_2_desc: 'كل مزود تم فحصه شخصياً. تجارب حقيقية، تقييمات حقيقية.',
+        trust_3_title: 'بلغتك', trust_3_desc: 'خدمة بالإنجليزية والتركية والعربية والروسية.',
+        trust_4_title: 'دفع آمن', trust_4_desc: 'جميع المعاملات عبر PayTR. بيانات بطاقتك لا تُحفظ على خوادمنا.',
+        auth_overline: 'ابدأ الآن',
+        auth_title: 'إنشاء حساب أو تسجيل الدخول',
+        auth_signup: 'تسجيل', auth_signin: 'دخول',
+        form_name: 'الاسم الكامل', form_email: 'البريد الإلكتروني', form_phone: 'الهاتف', form_password: 'كلمة المرور',
+        form_continue: 'متابعة',
+        footer_tagline: 'كونسيرجك المحلي الموثوق. نقدم لك أفضل ما في إسطنبول.',
+        footer_contact: 'تواصل', footer_privacy: 'الخصوصية', footer_terms: 'الشروط', footer_hotel_partners: 'شركاء الفنادق'
+      },
+      ru: {
+        qr_title: 'Добро пожаловать в Istanbul Guardian',
+        qr_desc: 'Эта услуга доступна исключительно гостям наших партнёрских отелей. Пожалуйста, отсканируйте QR-код в вашем номере или лобби.',
+        qr_help: 'Не можете найти QR-код? Спросите на ресепшн.',
+        qr_contact: 'Связаться с поддержкой',
+        qr_partner: 'Вы партнёр-отель? →',
+        hero_overline: 'Ваш персональный гид в Стамбуле',
+        hero_title_1: 'Добро пожаловать', hero_title_2: 'Стамбул',
+        hero_subtitle: 'От хамама до истории, от трансфера до лучших ресторанов — бронирование за секунды, прозрачные цены.',
+        hotel_label: 'ВЫ ОСТАНОВИЛИСЬ В',
+        ai_label: 'AI КОНСЬЕРЖ',
+        ai_title: 'Что вы хотите сделать в Стамбуле?',
+        ai_subtitle: 'Расскажите о настроении, я спланирую ваш день.',
+        cat_overline: 'ИССЛЕДОВАТЬ',
+        cat_title: 'Подобранные впечатления',
+        cat_subtitle: 'Тщательно выбранные местные услуги с прозрачными ценами',
+        cat_hammam_title: 'Хамам и спа', cat_hammam_desc: 'Аутентичная турецкая баня в исторических хамамах',
+        cat_tour_title: 'Туры', cat_tour_desc: 'Пешие туры, круизы по Босфору, однодневные поездки',
+        cat_transfer_title: 'Трансфер', cat_transfer_desc: 'Встреча в аэропорту, частные водители, поездки',
+        cat_restaurant_title: 'Рестораны', cat_restaurant_desc: 'Местные фавориты, рестораны на крыше, скрытые жемчужины',
+        cat_health_title: 'Медтуризм', cat_health_desc: 'Пересадка волос, стоматология, эстетические процедуры',
+        cat_nightlife_title: 'Ночная жизнь', cat_nightlife_desc: 'Бары на крыше, клубы, ночные впечатления',
+        trust_overline: 'ПОЧЕМУ ISTANBUL GUARDIAN',
+        trust_title: 'Местные, которым можно доверять',
+        trust_subtitle: 'Без скрытых платежей, без туристических ловушек',
+        trust_1_title: 'Полная прозрачность', trust_1_desc: 'Видите, куда идёт каждая копейка — поставщик, отель, платформа.',
+        trust_2_title: 'Отобранные партнёры', trust_2_desc: 'Каждый поставщик проверен лично. Реальные отзывы.',
+        trust_3_title: 'На вашем языке', trust_3_desc: 'Сервис на английском, турецком, арабском и русском.',
+        trust_4_title: 'Безопасная оплата', trust_4_desc: 'Все транзакции через PayTR. Данные карт не сохраняются.',
+        auth_overline: 'НАЧНИТЕ',
+        auth_title: 'Создать аккаунт или войти',
+        auth_signup: 'Регистрация', auth_signin: 'Вход',
+        form_name: 'Полное имя', form_email: 'Email', form_phone: 'Телефон', form_password: 'Пароль',
+        form_continue: 'Продолжить',
+        footer_tagline: 'Ваш надёжный местный консьерж. Лучшее Стамбула — у вас под рукой.',
+        footer_contact: 'Контакт', footer_privacy: 'Конфиденциальность', footer_terms: 'Условия', footer_hotel_partners: 'Отели-партнёры'
       }
+    };
 
-      // 2) Aktif dil butonunu işaretle
-      const currentLang = IG.getLang();
-      document.querySelectorAll('.ig-lang-btn').forEach(btn => {
-        if (btn.dataset.lang === currentLang) {
-          btn.classList.add('active');
-        }
+    let currentLang = 'en';
+    let currentHotel = null;
+
+    function applyLang(lang) {
+      currentLang = lang;
+      const dict = I18N[lang] || I18N.en;
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
       });
 
-      // 3) Dil değiştirme
-      document.querySelectorAll('.ig-lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          IG.setLang(btn.dataset.lang);
-        });
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
       });
 
-      // 4) Tab geçişi
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const tab = btn.dataset.tab;
+      localStorage.setItem('ig_lang', lang);
+    }
 
-          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+    function detectLang() {
+      const saved = localStorage.getItem('ig_lang');
+      if (saved && I18N[saved]) return saved;
+      const browser = (navigator.language || 'en').slice(0, 2);
+      if (I18N[browser]) return browser;
+      return 'en';
+    }
 
-          document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-          document.getElementById(tab + 'Form').classList.add('active');
-
-          hideErrors();
-        });
-      });
-
-      // 5) Eğer kullanıcı zaten giriş yapmışsa, app.html'e yönlendir
-      try {
-        const user = await IG.auth.getUser();
-        if (user) {
-          window.location.href = 'app.html';
-          return;
-        }
-      } catch (e) {
-        // Kullanıcı yok, devam
-      }
-
-      // 6) Form submit'leri
-      document.getElementById('signinForm').addEventListener('submit', handleSignIn);
-      document.getElementById('signupForm').addEventListener('submit', handleSignUp);
-
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
     });
 
-    // ========================================================================
-    // OTEL BİLGİSİNİ YÜKLE
-    // ========================================================================
-    async function loadHotelInfo(slug) {
-      try {
-        const sb = await initSupabase();
-        if (!sb) return;
+    // ===========================================================
+    // INIT
+    // ===========================================================
+    document.addEventListener('DOMContentLoaded', async () => {
+      applyLang(detectLang());
 
-        const { data: hotel, error } = await sb
-          .from('hotels')
-          .select('name, district')
-          .eq('slug', slug)
-          .eq('is_active', true)
-          .single();
+      const params = new URLSearchParams(window.location.search);
+      const hotelSlug = params.get('h');
 
-        if (error || !hotel) {
-          console.warn('Otel bulunamadı:', slug);
-          return;
-        }
-
-        document.getElementById('hotelName').textContent = hotel.name;
-        document.getElementById('hotelDistrict').textContent = hotel.district;
-        document.getElementById('hotelInfo').classList.remove('ig-hidden');
-      } catch (err) {
-        console.error('Otel bilgisi yüklenemedi:', err);
-      }
-    }
-
-    // ========================================================================
-    // SIGN IN
-    // ========================================================================
-    async function handleSignIn(e) {
-      e.preventDefault();
-      hideErrors();
-      showLoading();
-
-      const email = document.getElementById('signinEmail').value.trim();
-      const password = document.getElementById('signinPassword').value;
-
-      try {
-        await IG.auth.signIn(email, password);
-        window.location.href = 'app.html';
-      } catch (err) {
-        hideLoading();
-        showError('signinError', err.message || IG.t('error.generic'));
-      }
-    }
-
-    // ========================================================================
-    // SIGN UP
-    // ========================================================================
-    async function handleSignUp(e) {
-      e.preventDefault();
-      hideErrors();
-
-      const fullName = document.getElementById('signupName').value.trim();
-      const email = document.getElementById('signupEmail').value.trim();
-      const phone = document.getElementById('signupPhone').value.trim();
-      const password = document.getElementById('signupPassword').value;
-
-      // Basit validasyon
-      if (phone.length < 7) {
-        showError('signupError', IG.t('error.invalidPhone'));
+      // QR şart - eğer slug yoksa "QR required" sayfası göster
+      if (!hotelSlug) {
+        document.getElementById('loadingState').classList.add('ig-hidden');
+        document.getElementById('qrRequiredView').classList.remove('ig-hidden');
         return;
       }
 
-      showLoading();
-
       try {
-        await IG.auth.signUp(email, password, fullName, phone, IG.getLang());
+        const sb = await initSupabase();
 
-        // Kullanıcı kaydoldu, profili oluştur (RPC ile)
-        try {
-          await IG.rpc('register_tourist', {
-            p_full_name: fullName,
-            p_phone: phone,
-            p_email: email,
-            p_lang: IG.getLang()
-          });
-        } catch (rpcErr) {
-          console.warn('Profil oluşturulamadı, app.html\'de tekrar denenecek:', rpcErr);
+        // Mevcut session var mı?
+        const { data: { user } } = await sb.auth.getUser();
+        if (user) {
+          // Zaten giriş yapmış, app.html'e yönlendir
+          window.location.href = `app.html?h=${hotelSlug}`;
+          return;
         }
 
-        window.location.href = 'app.html';
+        // Hotel'i çek
+        const { data: hotel } = await sb
+          .from('hotels')
+          .select('id, name, slug, district, primary_languages')
+          .eq('slug', hotelSlug)
+          .eq('is_active', true)
+          .maybeSingle();
+
+        if (!hotel) {
+          // Slug var ama hotel yok, QR required göster
+          document.getElementById('loadingState').classList.add('ig-hidden');
+          document.getElementById('qrRequiredView').classList.remove('ig-hidden');
+          return;
+        }
+
+        currentHotel = hotel;
+
+        // Otel adı kart'a yaz
+        document.getElementById('hotelName').textContent = `${hotel.name}${hotel.district ? ' · ' + hotel.district : ''}`;
+
+        // Otelin desteklediği dillere göre default lang seç
+        if (hotel.primary_languages && hotel.primary_languages.length > 0) {
+          const browserLang = detectLang();
+          const supported = hotel.primary_languages.includes(browserLang) ? browserLang : hotel.primary_languages[0];
+          if (supported && supported !== currentLang) applyLang(supported);
+        }
+
+        // Loading kapat, main view aç
+        document.getElementById('loadingState').classList.add('ig-hidden');
+        document.getElementById('mainView').classList.remove('ig-hidden');
+
+        setupForms();
+        setupNavigation();
+
       } catch (err) {
-        hideLoading();
-        showError('signupError', err.message || IG.t('error.generic'));
+        console.error('Init hatası:', err);
+        document.getElementById('loadingState').classList.add('ig-hidden');
+        document.getElementById('qrRequiredView').classList.remove('ig-hidden');
       }
+    });
+
+    function setupNavigation() {
+      // Kategori kartları
+      document.querySelectorAll('[data-cat]').forEach(card => {
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          const cat = card.dataset.cat;
+          window.location.href = `category.html?h=${currentHotel.slug}&cat=${cat}`;
+        });
+      });
+
+      // AI CTA
+      document.getElementById('aiCta').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = `ai.html?h=${currentHotel.slug}`;
+      });
+
+      // Auth tab switcher
+      const signupTab = document.getElementById('signupTab');
+      const signinTab = document.getElementById('signinTab');
+      const signupForm = document.getElementById('signupForm');
+      const signinForm = document.getElementById('signinForm');
+
+      signupTab.addEventListener('click', () => {
+        signupTab.classList.add('active');
+        signinTab.classList.remove('active');
+        signupForm.classList.remove('ig-hidden');
+        signinForm.classList.add('ig-hidden');
+      });
+
+      signinTab.addEventListener('click', () => {
+        signinTab.classList.add('active');
+        signupTab.classList.remove('active');
+        signinForm.classList.remove('ig-hidden');
+        signupForm.classList.add('ig-hidden');
+      });
     }
 
-    // ========================================================================
-    // YARDIMCI FONKSİYONLAR
-    // ========================================================================
-    function showError(elementId, message) {
-      const el = document.getElementById(elementId);
-      el.textContent = message;
-      el.classList.remove('ig-hidden');
-    }
+    function setupForms() {
+      // SIGN UP
+      document.getElementById('signupForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const errorEl = document.getElementById('suError');
+        const btn = document.getElementById('suSubmit');
+        errorEl.classList.add('ig-hidden');
+        btn.disabled = true;
+        btn.textContent = '...';
 
-    function hideErrors() {
-      document.querySelectorAll('.ig-error').forEach(el => el.classList.add('ig-hidden'));
-    }
+        const fullName = document.getElementById('suName').value.trim();
+        const email = document.getElementById('suEmail').value.trim();
+        const phone = document.getElementById('suPhone').value.trim();
+        const password = document.getElementById('suPassword').value;
 
-    function showLoading() {
-      document.getElementById('loadingOverlay').classList.remove('ig-hidden');
-    }
+        try {
+          const sb = await initSupabase();
+          const { error } = await sb.auth.signUp({
+            email, password,
+            options: { data: { full_name: fullName, phone, preferred_lang: currentLang } }
+          });
+          if (error) throw error;
 
-    function hideLoading() {
-      document.getElementById('loadingOverlay').classList.add('ig-hidden');
+          // Profile oluştur (RPC veya direkt)
+          const { data: { user } } = await sb.auth.getUser();
+          if (user) {
+            await sb.from('profiles').upsert({
+              id: user.id,
+              full_name: fullName,
+              email,
+              phone: phone || null,
+              preferred_lang: currentLang,
+              role: 'tourist',
+              hotel_id: currentHotel.id
+            });
+          }
+
+          window.location.href = `app.html?h=${currentHotel.slug}`;
+        } catch (err) {
+          errorEl.textContent = err.message;
+          errorEl.classList.remove('ig-hidden');
+          btn.disabled = false;
+          btn.textContent = I18N[currentLang]?.form_continue || 'Continue';
+        }
+      });
+
+      // SIGN IN
+      document.getElementById('signinForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const errorEl = document.getElementById('siError');
+        const btn = document.getElementById('siSubmit');
+        errorEl.classList.add('ig-hidden');
+        btn.disabled = true;
+        btn.textContent = '...';
+
+        const email = document.getElementById('siEmail').value.trim();
+        const password = document.getElementById('siPassword').value;
+
+        try {
+          const sb = await initSupabase();
+          const { error } = await sb.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          window.location.href = `app.html?h=${currentHotel.slug}`;
+        } catch (err) {
+          errorEl.textContent = err.message === 'Invalid login credentials' 
+            ? (currentLang === 'tr' ? 'E-posta veya şifre hatalı' : 'Invalid email or password')
+            : err.message;
+          errorEl.classList.remove('ig-hidden');
+          btn.disabled = false;
+          btn.textContent = I18N[currentLang]?.form_continue || 'Continue';
+        }
+      });
     }
   </script>
 
