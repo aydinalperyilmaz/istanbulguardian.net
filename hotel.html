@@ -9,43 +9,250 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%E2%9A%93%3C/text%3E%3C/svg%3E">
 
   <style>
-    .login-container {
+    /* === KURUMSAL LOGIN EKRANI === */
+    .login-page {
       min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--ig-bg);
+    }
+
+    .login-hero {
+      background: linear-gradient(135deg, #0a1428 0%, #1a2a4a 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 4rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 80%, rgba(201, 169, 97, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-logo {
+      font-family: var(--ig-font-display);
+      font-size: 1.5rem;
+      color: var(--ig-text);
+      margin-bottom: 4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-logo .anchor { color: var(--ig-gold); font-size: 1.8rem; }
+    .hero-logo span { color: var(--ig-gold); }
+
+    .hero-title {
+      font-family: var(--ig-font-display);
+      font-size: 3rem;
+      color: var(--ig-text);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      max-width: 500px;
+    }
+
+    .hero-title em {
+      color: var(--ig-gold);
+      font-style: italic;
+    }
+
+    .hero-subtitle {
+      color: var(--ig-text-soft);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      max-width: 480px;
+      margin-bottom: 3rem;
+    }
+
+    .hero-features {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 400px;
+    }
+
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--ig-text-soft);
+      font-size: 0.95rem;
+    }
+
+    .hero-feature-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(201, 169, 97, 0.12);
+      border: 1px solid rgba(201, 169, 97, 0.3);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1rem;
+      flex-shrink: 0;
+      color: var(--ig-gold);
     }
-    .login-card {
-      max-width: 440px;
+
+    .hero-footer-text {
+      position: relative;
+      z-index: 1;
+      color: var(--ig-text-dim);
+      font-size: 0.8rem;
+      max-width: 480px;
+    }
+
+    /* SAĞ TARAF */
+    .login-form-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 3rem;
+      background: var(--ig-bg);
+    }
+
+    .login-form-wrapper {
+      max-width: 420px;
       width: 100%;
-      background: var(--ig-surface);
-      border: 1px solid var(--ig-border);
-      border-radius: var(--ig-radius-md);
-      padding: 2.5rem;
+      margin: 0 auto;
     }
-    .role-badge {
+
+    .login-role-badge {
       display: inline-block;
       background: rgba(201, 169, 97, 0.15);
       color: var(--ig-gold);
-      padding: 4px 12px;
-      border-radius: 4px;
+      padding: 6px 14px;
+      border-radius: 6px;
       font-size: 0.7rem;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
-    .help-link {
-      text-align: center;
-      margin-top: 1.5rem;
+
+    .login-greeting {
+      font-family: var(--ig-font-display);
+      font-size: 2.25rem;
+      color: var(--ig-text);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .login-subtitle {
+      color: var(--ig-text-soft);
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .form-extra {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1rem 0 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: var(--ig-text-soft);
+      user-select: none;
+    }
+
+    .remember-me input {
+      cursor: pointer;
+      accent-color: var(--ig-gold);
+    }
+
+    .forgot-link {
+      color: var(--ig-gold);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: opacity 0.2s;
+    }
+
+    .forgot-link:hover { opacity: 0.8; }
+
+    .login-footer {
+      margin-top: 2.5rem;
       padding-top: 1.5rem;
       border-top: 1px solid var(--ig-border-soft);
-      font-size: 0.85rem;
-      color: var(--ig-text-soft);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem 1.5rem;
+      font-size: 0.8rem;
+      color: var(--ig-text-dim);
     }
-    .help-link a { color: var(--ig-gold); text-decoration: none; }
 
+    .login-footer a {
+      color: var(--ig-text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .login-footer a:hover { color: var(--ig-gold); }
+
+    /* Reset password modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 20, 40, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1rem;
+    }
+
+    .modal {
+      background: var(--ig-surface);
+      border: 1px solid var(--ig-border);
+      border-radius: var(--ig-radius-md);
+      padding: 2rem;
+      max-width: 440px;
+      width: 100%;
+    }
+
+    /* RESPONSIVE — Mobile */
+    @media (max-width: 900px) {
+      .login-page {
+        grid-template-columns: 1fr;
+      }
+
+      .login-hero {
+        padding: 2rem 1.5rem;
+        min-height: auto;
+      }
+
+      .hero-logo { margin-bottom: 1.5rem; }
+      .hero-title { font-size: 2rem; margin-bottom: 1rem; }
+      .hero-subtitle { font-size: 1rem; margin-bottom: 1.5rem; }
+      .hero-features { display: none; }
+      .hero-footer-text { display: none; }
+
+      .login-form-side {
+        padding: 2rem 1.5rem;
+      }
+
+      .login-greeting { font-size: 1.75rem; }
+    }
+
+    /* === PANEL STILLERI (otel paneli gövde kısmı için) === */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -257,53 +464,129 @@
     <div class="ig-loader ig-loader-large" style="margin:0 auto;"></div>
   </div>
 
-  <!-- GİRİŞ EKRANI -->
+  <!-- ========================================== -->
+  <!-- KURUMSAL GİRİŞ EKRANI -->
+  <!-- ========================================== -->
   <div id="loginView" class="ig-hidden">
-    <div class="login-container">
-      <div class="login-card">
-        <div style="text-align: center; margin-bottom: 1.5rem;">
-          <div style="font-size: 2.5rem; margin-bottom: .5rem;">🏨</div>
-          <span class="role-badge">OTEL PARTNERİ</span>
-          <h2 style="margin-bottom: .5rem;">Hoş geldiniz</h2>
-          <p class="ig-text-soft" style="font-size: .9rem;">
-            Otel panelinize giriş yapın
+    <div class="login-page">
+
+      <!-- SOL: HERO -->
+      <div class="login-hero">
+        <div class="hero-content">
+          <div class="hero-logo">
+            <span class="anchor">⚓</span>
+            Istanbul <span>Guardian</span>
+          </div>
+
+          <h1 class="hero-title">
+            Misafirleriniz için <em>en iyi</em> İstanbul deneyimi.
+          </h1>
+
+          <p class="hero-subtitle">
+            Şeffaf komisyon, anlık rezervasyon, profesyonel partnership. 
+            Otelinize gelen her misafir için yeni bir gelir kaynağı.
           </p>
+
+          <div class="hero-features">
+            <div class="hero-feature">
+              <div class="hero-feature-icon">📊</div>
+              <div>Tam şeffaf komisyon yapısı</div>
+            </div>
+            <div class="hero-feature">
+              <div class="hero-feature-icon">⚡</div>
+              <div>Anlık rezervasyon takibi</div>
+            </div>
+            <div class="hero-feature">
+              <div class="hero-feature-icon">💰</div>
+              <div>Aylık otomatik ödeme</div>
+            </div>
+            <div class="hero-feature">
+              <div class="hero-feature-icon">🌍</div>
+              <div>4 dilde misafir desteği</div>
+            </div>
+          </div>
         </div>
 
-        <form id="loginForm">
-          <div class="ig-form-group">
-            <label class="ig-label">E-posta</label>
-            <input type="email" class="ig-input" id="loginEmail" required autocomplete="username">
+        <p class="hero-footer-text">
+          Bosphorus Global tarafından işletilmektedir. PayTR ile güvenli ödeme. KVKK uyumlu.
+        </p>
+      </div>
+
+      <!-- SAĞ: FORM -->
+      <div class="login-form-side">
+        <div class="login-form-wrapper">
+
+          <span class="login-role-badge">🏨 Otel Partneri</span>
+
+          <h2 class="login-greeting">Hoş geldiniz</h2>
+          <p class="login-subtitle">Otel panelinize giriş yapın</p>
+
+          <form id="loginForm">
+            <div class="ig-form-group">
+              <label class="ig-label" for="loginEmail">E-posta adresi</label>
+              <input type="email" class="ig-input" id="loginEmail" required autocomplete="username" placeholder="ornek@otelim.com">
+            </div>
+
+            <div class="ig-form-group">
+              <label class="ig-label" for="loginPassword">Şifre</label>
+              <input type="password" class="ig-input" id="loginPassword" required autocomplete="current-password" placeholder="••••••••">
+            </div>
+
+            <div class="form-extra">
+              <label class="remember-me">
+                <input type="checkbox" id="rememberMe">
+                <span>Beni hatırla</span>
+              </label>
+              <a href="#" class="forgot-link" id="forgotLink">Şifremi unuttum</a>
+            </div>
+
+            <div id="loginError" class="ig-error ig-hidden ig-mb-md"></div>
+
+            <button type="submit" class="ig-btn ig-btn-primary ig-btn-block" id="loginSubmit">
+              Giriş yap
+            </button>
+          </form>
+
+          <div class="login-footer">
+            <a href="mailto:support@istanbulguardian.net">İletişim</a>
+            <a href="#" onclick="alert('KVKK metni yakında eklenecek'); return false;">KVKK</a>
+            <a href="#" onclick="alert('Gizlilik politikası yakında eklenecek'); return false;">Gizlilik</a>
+            <a href="index.html">Misafir alanı</a>
           </div>
 
-          <div class="ig-form-group">
-            <label class="ig-label">Şifre</label>
-            <input type="password" class="ig-input" id="loginPassword" required autocomplete="current-password">
-          </div>
-
-          <div id="loginError" class="ig-error ig-hidden ig-mb-md"></div>
-
-          <button type="submit" class="ig-btn ig-btn-primary ig-btn-block" id="loginSubmit">
-            Giriş yap
-          </button>
-        </form>
-
-        <div class="help-link">
-          Otel partneri değil misiniz? <br>
-          <a href="index.html">Misafir alanına git →</a>
-        </div>
-
-        <div class="help-link" style="border-top: none; padding-top: .5rem;">
-          Yardım için <a href="mailto:support@istanbulguardian.net">destek</a> ile iletişime geçin
         </div>
       </div>
+
+    </div>
+  </div>
+
+  <!-- ŞİFREMİ UNUTTUM MODAL -->
+  <div id="resetModal" class="modal-backdrop ig-hidden">
+    <div class="modal">
+      <h3 class="ig-mb-md">Şifre sıfırlama</h3>
+      <p class="ig-text-soft ig-mb-lg" style="font-size:.9rem;">
+        E-posta adresinizi yazın, size şifre sıfırlama linki gönderelim.
+      </p>
+
+      <form id="resetForm">
+        <div class="ig-form-group">
+          <label class="ig-label">E-posta adresi</label>
+          <input type="email" class="ig-input" id="resetEmail" required>
+        </div>
+        <div id="resetError" class="ig-error ig-hidden ig-mb-md"></div>
+        <div id="resetSuccess" class="ig-hidden ig-mb-md" style="background:rgba(95, 184, 138, 0.1); border:1px solid var(--ig-success); padding:.75rem; border-radius:6px; color:var(--ig-success); font-size:.9rem;"></div>
+        <div class="ig-flex ig-gap-md">
+          <button type="button" class="ig-btn ig-btn-ghost ig-btn-block" onclick="closeResetModal()">İptal</button>
+          <button type="submit" class="ig-btn ig-btn-primary ig-btn-block" id="resetSubmit">Link gönder</button>
+        </div>
+      </form>
     </div>
   </div>
 
   <!-- YETKİ YOK -->
   <div id="unauthorizedView" class="ig-hidden">
-    <div class="login-container">
-      <div class="login-card ig-text-center">
+    <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1rem;">
+      <div style="max-width:440px; width:100%; background:var(--ig-surface); border:1px solid var(--ig-border); border-radius:var(--ig-radius-md); padding:2.5rem; text-align:center;">
         <div style="font-size:3rem; margin-bottom:1rem;">🏨</div>
         <h3 class="ig-mb-md">Otel partneri değilsiniz</h3>
         <p class="ig-text-soft ig-mb-lg" style="font-size:.9rem;">
@@ -313,9 +596,9 @@
         <button class="ig-btn ig-btn-primary ig-btn-block" onclick="signOutAndShowLogin()">
           Başka hesapla giriş yap
         </button>
-        <div class="help-link">
-          <a href="mailto:support@istanbulguardian.net">Destek ile iletişime geç</a>
-        </div>
+        <p class="ig-mt-md" style="font-size:.85rem;">
+          <a href="mailto:support@istanbulguardian.net" class="ig-text-gold">Destek ile iletişime geç</a>
+        </p>
       </div>
     </div>
   </div>
@@ -530,6 +813,7 @@
         if (!user) {
           showView('loginView');
           setupLoginForm();
+          setupResetForm();
           return;
         }
         await loadHotelAndShow();
@@ -537,6 +821,7 @@
         console.error('Init hatası:', err);
         showView('loginView');
         setupLoginForm();
+        setupResetForm();
       }
     });
 
@@ -546,6 +831,7 @@
       if (!user) {
         showView('loginView');
         setupLoginForm();
+        setupResetForm();
         return;
       }
 
@@ -602,7 +888,7 @@
         try {
           const sb = await initSupabase();
           await sb.auth.signOut();
-          const { data, error } = await sb.auth.signInWithPassword({ email, password });
+          const { error } = await sb.auth.signInWithPassword({ email, password });
           if (error) throw error;
           await loadHotelAndShow();
         } catch (err) {
@@ -614,6 +900,58 @@
           btn.textContent = 'Giriş yap';
         }
       });
+
+      // Şifremi unuttum link
+      document.getElementById('forgotLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim();
+        if (email) document.getElementById('resetEmail').value = email;
+        document.getElementById('resetModal').classList.remove('ig-hidden');
+      });
+    }
+
+    function setupResetForm() {
+      const form = document.getElementById('resetForm');
+      if (form.dataset.bound) return;
+      form.dataset.bound = '1';
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const errorEl = document.getElementById('resetError');
+        const successEl = document.getElementById('resetSuccess');
+        const btn = document.getElementById('resetSubmit');
+        errorEl.classList.add('ig-hidden');
+        successEl.classList.add('ig-hidden');
+        btn.disabled = true;
+        btn.textContent = 'Gönderiliyor...';
+
+        const email = document.getElementById('resetEmail').value.trim();
+
+        try {
+          const sb = await initSupabase();
+          const { error } = await sb.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/password-reset.html'
+          });
+          if (error) throw error;
+
+          successEl.textContent = '✓ Sıfırlama linki e-postanıza gönderildi. Birkaç dakika içinde gelmezse spam klasörünü kontrol edin.';
+          successEl.classList.remove('ig-hidden');
+          btn.textContent = 'Gönderildi';
+        } catch (err) {
+          errorEl.textContent = err.message || 'Bir hata oluştu';
+          errorEl.classList.remove('ig-hidden');
+          btn.disabled = false;
+          btn.textContent = 'Link gönder';
+        }
+      });
+    }
+
+    function closeResetModal() {
+      document.getElementById('resetModal').classList.add('ig-hidden');
+      document.getElementById('resetSuccess').classList.add('ig-hidden');
+      document.getElementById('resetError').classList.add('ig-hidden');
+      document.getElementById('resetSubmit').disabled = false;
+      document.getElementById('resetSubmit').textContent = 'Link gönder';
     }
 
     async function initPanel() {
@@ -739,6 +1077,7 @@
       const dateStr = date.toLocaleDateString('tr-TR', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
       const timeStr = date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
       const langFlag = { tr:'🇹🇷', en:'🇬🇧', ar:'🇸🇦', ru:'🇷🇺' }[b.contact_lang] || '';
+      const cur = b.currency === 'TRY' ? 'TL' : b.currency;
       const total = parseFloat(b.total_amount || 0);
       const providerAmt = parseFloat(b.provider_amount || 0);
       const hotelAmt = parseFloat(b.hotel_amount || 0);
@@ -767,15 +1106,15 @@
           <div class="meta-item"><span class="meta-label">Tarih</span><span class="meta-value">${dateStr}</span></div>
           <div class="meta-item"><span class="meta-label">Saat</span><span class="meta-value">${timeStr}</span></div>
           <div class="meta-item"><span class="meta-label">Kişi</span><span class="meta-value">${b.num_persons}</span></div>
-          <div class="meta-item"><span class="meta-label">Müşteri ödedi</span><span class="meta-value"><strong>${total.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</strong></span></div>
+          <div class="meta-item"><span class="meta-label">Müşteri ödedi</span><span class="meta-value"><strong>${total.toFixed(2)} ${cur}</strong></span></div>
         </div>
         <div class="commission-breakdown">
           <div class="breakdown-title">📊 Tutar nereye gidiyor</div>
-          <div class="breakdown-row"><span><span class="breakdown-percent">${pctProvider}%</span>${escapeHtml(b.providers?.name || 'Hizmet sağlayıcı')}</span><span>${providerAmt.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</span></div>
-          <div class="breakdown-row your-row"><span><span class="breakdown-percent">${pctHotel}%</span>Oteliniz</span><span>+${hotelAmt.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</span></div>
-          ${recepAmt > 0 ? `<div class="breakdown-row"><span><span class="breakdown-percent">${pctRecep}%</span>Resepsiyonist</span><span>${recepAmt.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</span></div>` : ''}
-          <div class="breakdown-row"><span><span class="breakdown-percent">${pctPlatform}%</span>Istanbul Guardian platform</span><span>${platformAmt.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</span></div>
-          <div class="breakdown-row total-row"><span>Toplam</span><span>${total.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</span></div>
+          <div class="breakdown-row"><span><span class="breakdown-percent">${pctProvider}%</span>${escapeHtml(b.providers?.name || 'Hizmet sağlayıcı')}</span><span>${providerAmt.toFixed(2)} ${cur}</span></div>
+          <div class="breakdown-row your-row"><span><span class="breakdown-percent">${pctHotel}%</span>Oteliniz</span><span>+${hotelAmt.toFixed(2)} ${cur}</span></div>
+          ${recepAmt > 0 ? `<div class="breakdown-row"><span><span class="breakdown-percent">${pctRecep}%</span>Resepsiyonist</span><span>${recepAmt.toFixed(2)} ${cur}</span></div>` : ''}
+          <div class="breakdown-row"><span><span class="breakdown-percent">${pctPlatform}%</span>Istanbul Guardian platform</span><span>${platformAmt.toFixed(2)} ${cur}</span></div>
+          <div class="breakdown-row total-row"><span>Toplam</span><span>${total.toFixed(2)} ${cur}</span></div>
         </div>
         ${b.special_requests ? `<div style="margin-top:1rem; padding:.75rem; background:var(--ig-bg-soft); border-radius:var(--ig-radius-sm); font-size:.85rem;"><strong style="color:var(--ig-text-soft);">Misafir notu:</strong> ${escapeHtml(b.special_requests)}</div>` : ''}
       </div>`;
