@@ -9,8 +9,8 @@
 // ============================================================================
 
 // !!!! BURAYA KENDI BILGILERINI YAPISTIR !!!!
-const SUPABASE_URL = "PROJECT_URL_BURAYA";
-const SUPABASE_KEY = "PUBLISHABLE_KEY_BURAYA";
+const SUPABASE_URL = "https://nbkksybvrbtxubloqilj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_jMDEVMX5HwojdvssOo2ysA_EJ5EG9L9";
 // !!!! ----------------------------------- !!!!
 
 // Supabase JS SDK'yı CDN'den yükle
