@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a1428">
-  <title>Hotel Panel — Istanbul Guardian</title>
+  <title>Otel Paneli — Istanbul Guardian</title>
   <link rel="stylesheet" href="assets/style.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%E2%9A%93%3C/text%3E%3C/svg%3E">
 
   <style>
-    /* === LOGIN VIEW === */
     .login-container {
       min-height: 100vh;
       display: flex;
@@ -47,7 +46,6 @@
     }
     .help-link a { color: var(--ig-gold); text-decoration: none; }
 
-    /* === PANEL VIEW === */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -255,90 +253,83 @@
 </head>
 <body>
 
-  <!-- INITIAL LOADING (Auth check) -->
   <div id="initialLoading" class="ig-text-center" style="padding:5rem 0;">
     <div class="ig-loader ig-loader-large" style="margin:0 auto;"></div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- LOGIN VIEW -->
-  <!-- ============================================== -->
+  <!-- GİRİŞ EKRANI -->
   <div id="loginView" class="ig-hidden">
     <div class="login-container">
       <div class="login-card">
         <div style="text-align: center; margin-bottom: 1.5rem;">
           <div style="font-size: 2.5rem; margin-bottom: .5rem;">🏨</div>
-          <span class="role-badge">HOTEL PARTNER</span>
-          <h2 style="margin-bottom: .5rem;">Welcome back</h2>
+          <span class="role-badge">OTEL PARTNERİ</span>
+          <h2 style="margin-bottom: .5rem;">Hoş geldiniz</h2>
           <p class="ig-text-soft" style="font-size: .9rem;">
-            Sign in to your hotel dashboard
+            Otel panelinize giriş yapın
           </p>
         </div>
 
         <form id="loginForm">
           <div class="ig-form-group">
-            <label class="ig-label">Email</label>
+            <label class="ig-label">E-posta</label>
             <input type="email" class="ig-input" id="loginEmail" required autocomplete="username">
           </div>
 
           <div class="ig-form-group">
-            <label class="ig-label">Password</label>
+            <label class="ig-label">Şifre</label>
             <input type="password" class="ig-input" id="loginPassword" required autocomplete="current-password">
           </div>
 
           <div id="loginError" class="ig-error ig-hidden ig-mb-md"></div>
 
           <button type="submit" class="ig-btn ig-btn-primary ig-btn-block" id="loginSubmit">
-            Sign in
+            Giriş yap
           </button>
         </form>
 
         <div class="help-link">
-          Not a hotel partner? <br>
-          <a href="index.html">Go to guest area →</a>
+          Otel partneri değil misiniz? <br>
+          <a href="index.html">Misafir alanına git →</a>
         </div>
 
         <div class="help-link" style="border-top: none; padding-top: .5rem;">
-          Need help? <a href="mailto:support@istanbulguardian.net">Contact support</a>
+          Yardım için <a href="mailto:support@istanbulguardian.net">destek</a> ile iletişime geçin
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- UNAUTHORIZED VIEW (logged in but not a hotel) -->
-  <!-- ============================================== -->
+  <!-- YETKİ YOK -->
   <div id="unauthorizedView" class="ig-hidden">
     <div class="login-container">
       <div class="login-card ig-text-center">
         <div style="font-size:3rem; margin-bottom:1rem;">🏨</div>
-        <h3 class="ig-mb-md">Not a hotel partner</h3>
+        <h3 class="ig-mb-md">Otel partneri değilsiniz</h3>
         <p class="ig-text-soft ig-mb-lg" style="font-size:.9rem;">
-          You're signed in, but this account is not registered as a hotel partner.<br>
-          Contact us to add your hotel.
+          Giriş yaptınız ama bu hesap otel partneri olarak kayıtlı değil.<br>
+          Otelinizi sisteme eklemek için bizimle iletişime geçin.
         </p>
         <button class="ig-btn ig-btn-primary ig-btn-block" onclick="signOutAndShowLogin()">
-          Sign in with another account
+          Başka hesapla giriş yap
         </button>
         <div class="help-link">
-          <a href="mailto:support@istanbulguardian.net">Contact support</a>
+          <a href="mailto:support@istanbulguardian.net">Destek ile iletişime geç</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- PANEL VIEW (the actual hotel dashboard) -->
-  <!-- ============================================== -->
+  <!-- PANEL -->
   <div id="panelView" class="ig-hidden">
 
     <nav class="ig-nav">
       <a href="hotel.html" class="ig-nav-brand" style="text-decoration:none;">
         Istanbul <span>Guardian</span>
-        <span style="color:var(--ig-gold); font-size:.8rem; margin-left:.5rem;">HOTEL</span>
+        <span style="color:var(--ig-gold); font-size:.8rem; margin-left:.5rem;">OTEL</span>
       </a>
       <button id="signoutBtn" class="ig-btn ig-btn-ghost" style="padding:.5rem 1rem; font-size:.85rem;">
-        Sign out
+        Çıkış yap
       </button>
     </nav>
 
@@ -346,7 +337,7 @@
       <div class="ig-container" style="max-width: 1100px;">
 
         <div class="ig-mb-2xl">
-          <div class="ig-overline ig-mb-xs">YOUR HOTEL</div>
+          <div class="ig-overline ig-mb-xs">OTELİNİZ</div>
           <h1 class="ig-display" id="hotelName">—</h1>
           <p class="ig-text-soft" id="hotelMeta">—</p>
         </div>
@@ -354,155 +345,155 @@
         <div class="trust-banner">
           <div class="trust-banner-icon">🔒</div>
           <div style="flex:1;">
-            <strong style="color:var(--ig-success);">Full transparency.</strong>
+            <strong style="color:var(--ig-success);">Tam şeffaflık.</strong>
             <span class="ig-text-soft" style="font-size:.9rem;">
-              Every booking shows the complete commission breakdown. Nothing is hidden.
+              Her rezervasyonun komisyon dağılımı açık şekilde gösterilir. Hiçbir şey gizli değil.
             </span>
           </div>
         </div>
 
         <div class="stats-grid">
           <div class="stat-card gold">
-            <div class="stat-label">Today's earnings</div>
-            <div class="stat-value" id="statToday">— TRY</div>
-            <div class="stat-sublabel" id="statTodayCount">0 bookings</div>
+            <div class="stat-label">Bugünkü kazanç</div>
+            <div class="stat-value" id="statToday">— TL</div>
+            <div class="stat-sublabel" id="statTodayCount">0 rezervasyon</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">This month</div>
-            <div class="stat-value" id="statMonth">— TRY</div>
-            <div class="stat-sublabel" id="statMonthCount">0 bookings</div>
+            <div class="stat-label">Bu ay</div>
+            <div class="stat-value" id="statMonth">— TL</div>
+            <div class="stat-sublabel" id="statMonthCount">0 rezervasyon</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">All time</div>
-            <div class="stat-value" id="statAll">— TRY</div>
-            <div class="stat-sublabel" id="statAllCount">0 bookings</div>
+            <div class="stat-label">Toplam</div>
+            <div class="stat-value" id="statAll">— TL</div>
+            <div class="stat-sublabel" id="statAllCount">0 rezervasyon</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Active right now</div>
+            <div class="stat-label">Şu an aktif</div>
             <div class="stat-value" id="statActive">0</div>
-            <div class="stat-sublabel">pending or confirmed</div>
+            <div class="stat-sublabel">bekleyen veya onaylı</div>
           </div>
         </div>
 
         <div class="panel-tabs">
-          <button class="panel-tab active" data-tab="bookings">Active Bookings</button>
-          <button class="panel-tab" data-tab="history">History</button>
-          <button class="panel-tab" data-tab="statement">Monthly Statement</button>
-          <button class="panel-tab" data-tab="settings">Settings & Info</button>
-          <button class="panel-tab" data-tab="qr">QR Code</button>
+          <button class="panel-tab active" data-tab="bookings">Aktif Rezervasyonlar</button>
+          <button class="panel-tab" data-tab="history">Geçmiş</button>
+          <button class="panel-tab" data-tab="statement">Aylık Hesap Özeti</button>
+          <button class="panel-tab" data-tab="settings">Ayarlar & Bilgi</button>
+          <button class="panel-tab" data-tab="qr">QR Kod</button>
         </div>
 
         <section id="tab-bookings" class="tab-content">
           <div id="activeBookingsList" class="booking-list">
-            <div class="empty-state">Loading...</div>
+            <div class="empty-state">Yükleniyor...</div>
           </div>
         </section>
 
         <section id="tab-history" class="tab-content ig-hidden">
           <div id="historyList" class="booking-list">
-            <div class="empty-state">Loading...</div>
+            <div class="empty-state">Yükleniyor...</div>
           </div>
         </section>
 
         <section id="tab-statement" class="tab-content ig-hidden">
           <div class="month-selector">
-            <label class="ig-label" style="margin:0;">Month:</label>
+            <label class="ig-label" style="margin:0;">Ay:</label>
             <select class="ig-select" id="monthSelector"></select>
-            <button class="ig-btn ig-btn-secondary" onclick="downloadStatementCSV()">⬇ Download CSV</button>
+            <button class="ig-btn ig-btn-secondary" onclick="downloadStatementCSV()">⬇ CSV İndir</button>
           </div>
           <div class="summary-card">
             <div class="summary-item">
-              <div class="stat-label">Bookings</div>
+              <div class="stat-label">Rezervasyon</div>
               <div class="stat-value" style="font-size:1.75rem;" id="stmtCount">0</div>
             </div>
             <div class="summary-item">
-              <div class="stat-label">Gross revenue</div>
-              <div class="stat-value" style="font-size:1.75rem;" id="stmtGross">0 TRY</div>
+              <div class="stat-label">Toplam ciro</div>
+              <div class="stat-value" style="font-size:1.75rem;" id="stmtGross">0 TL</div>
             </div>
             <div class="summary-item">
-              <div class="stat-label">Your earnings</div>
-              <div class="stat-value" style="font-size:1.75rem; color:var(--ig-success);" id="stmtYours">0 TRY</div>
+              <div class="stat-label">Sizin kazancınız</div>
+              <div class="stat-value" style="font-size:1.75rem; color:var(--ig-success);" id="stmtYours">0 TL</div>
             </div>
             <div class="summary-item">
-              <div class="stat-label">Status</div>
+              <div class="stat-label">Durum</div>
               <div class="stat-value" style="font-size:1.25rem;" id="stmtStatus">—</div>
             </div>
           </div>
           <div id="statementList" class="booking-list">
-            <div class="empty-state">Select a month</div>
+            <div class="empty-state">Bir ay seçin</div>
           </div>
         </section>
 
         <section id="tab-settings" class="tab-content ig-hidden">
           <div class="ig-card ig-mb-lg">
-            <div class="ig-overline ig-mb-md">📊 COMMISSION STRUCTURE</div>
+            <div class="ig-overline ig-mb-md">📊 KOMİSYON YAPISI</div>
             <p class="ig-text-soft ig-mb-md" style="font-size:.9rem;">
-              For every booking made through your QR code:
+              QR kodunuz üzerinden yapılan her rezervasyon için tutar şöyle dağıtılır:
             </p>
-            <div class="info-row"><span>Service provider receives</span><strong id="rateProvider">—%</strong></div>
-            <div class="info-row"><span style="color:var(--ig-gold);">Your hotel receives</span><strong id="rateHotel">—%</strong></div>
-            <div class="info-row"><span>Receptionist receives</span><strong id="rateRecep">—%</strong></div>
-            <div class="info-row"><span>Istanbul Guardian platform fee</span><strong id="ratePlatform">—%</strong></div>
+            <div class="info-row"><span>Hizmet sağlayıcı alır</span><strong id="rateProvider">—%</strong></div>
+            <div class="info-row"><span style="color:var(--ig-gold);">Oteliniz alır</span><strong id="rateHotel">—%</strong></div>
+            <div class="info-row"><span>Resepsiyonist alır</span><strong id="rateRecep">—%</strong></div>
+            <div class="info-row"><span>Istanbul Guardian platform ücreti</span><strong id="ratePlatform">—%</strong></div>
             <p class="ig-text-dim ig-mt-md" style="font-size:.8rem;">
-              These rates are agreed contractually. Past bookings are locked at original rates.
+              Bu oranlar sözleşme ile belirlenmiştir. Geçmiş rezervasyonlar yapıldıkları andaki oranlarla kilitlidir.
             </p>
           </div>
 
           <div class="ig-card ig-mb-lg">
-            <div class="ig-overline ig-mb-md">💰 PAYOUT INFORMATION</div>
-            <div class="info-row"><span>Payout frequency</span><strong>Monthly</strong></div>
-            <div class="info-row"><span>Payout date</span><strong>5th of each month</strong></div>
-            <div class="info-row"><span>For bookings completed in</span><strong>Previous month</strong></div>
-            <div class="info-row"><span>Payout method</span><strong>Bank transfer (IBAN)</strong></div>
-            <div class="info-row"><span>Currency</span><strong>TRY (Turkish Lira)</strong></div>
-            <div class="info-row"><span>Your IBAN on file</span><strong id="hotelIban" style="font-family:monospace; font-size:.9rem;">Not set</strong></div>
+            <div class="ig-overline ig-mb-md">💰 ÖDEME BİLGİSİ</div>
+            <div class="info-row"><span>Ödeme sıklığı</span><strong>Aylık</strong></div>
+            <div class="info-row"><span>Ödeme tarihi</span><strong>Her ayın 5'i</strong></div>
+            <div class="info-row"><span>Hangi ay için</span><strong>Bir önceki ay</strong></div>
+            <div class="info-row"><span>Ödeme yöntemi</span><strong>Banka havalesi (IBAN)</strong></div>
+            <div class="info-row"><span>Para birimi</span><strong>TL (Türk Lirası)</strong></div>
+            <div class="info-row"><span>Kayıtlı IBAN'ınız</span><strong id="hotelIban" style="font-family:monospace; font-size:.9rem;">Henüz tanımlanmadı</strong></div>
           </div>
 
           <div class="ig-card ig-mb-lg">
-            <div class="ig-overline ig-mb-md">🏨 HOTEL INFORMATION</div>
-            <div class="info-row"><span>Hotel name</span><strong id="infoName">—</strong></div>
+            <div class="ig-overline ig-mb-md">🏨 OTEL BİLGİLERİ</div>
+            <div class="info-row"><span>Otel adı</span><strong id="infoName">—</strong></div>
             <div class="info-row"><span>QR slug</span><strong id="infoSlug" style="font-family:monospace; font-size:.85rem;">—</strong></div>
-            <div class="info-row"><span>District</span><strong id="infoDistrict">—</strong></div>
-            <div class="info-row"><span>Status</span><strong id="infoActive">—</strong></div>
-            <div class="info-row"><span>Languages</span><strong id="infoLangs">—</strong></div>
+            <div class="info-row"><span>İlçe</span><strong id="infoDistrict">—</strong></div>
+            <div class="info-row"><span>Durum</span><strong id="infoActive">—</strong></div>
+            <div class="info-row"><span>Diller</span><strong id="infoLangs">—</strong></div>
           </div>
 
           <div class="ig-card">
-            <div class="ig-overline ig-mb-md">📞 SUPPORT & CONTACT</div>
-            <div class="info-row"><span>Platform operator</span><strong>Bosphorus Global</strong></div>
-            <div class="info-row"><span>Support email</span><strong><a href="mailto:support@istanbulguardian.net" class="ig-text-gold">support@istanbulguardian.net</a></strong></div>
-            <div class="info-row"><span>Tax ID (Şişli VD)</span><strong style="font-family:monospace;">1800943754</strong></div>
+            <div class="ig-overline ig-mb-md">📞 DESTEK & İLETİŞİM</div>
+            <div class="info-row"><span>Platform işletmecisi</span><strong>Bosphorus Global</strong></div>
+            <div class="info-row"><span>Destek e-posta</span><strong><a href="mailto:support@istanbulguardian.net" class="ig-text-gold">support@istanbulguardian.net</a></strong></div>
+            <div class="info-row"><span>Vergi No (Şişli VD)</span><strong style="font-family:monospace;">1800943754</strong></div>
             <p class="ig-text-dim ig-mt-md" style="font-size:.8rem;">
-              All payments processed by PayTR. KVKK-compliant.
+              Tüm ödemeler PayTR tarafından işlenir. Müşteri kart bilgileri sunucularımızda saklanmaz. KVKK uyumludur.
             </p>
           </div>
         </section>
 
         <section id="tab-qr" class="tab-content ig-hidden">
           <div class="qr-card">
-            <div class="ig-overline ig-mb-md">YOUR HOTEL'S QR CODE</div>
+            <div class="ig-overline ig-mb-md">OTELİNİZİN QR KODU</div>
             <p class="ig-text-soft ig-mb-lg" style="font-size:.9rem;">
-              Print and place in lobby, rooms, breakfast area.
+              Bu QR kodu yazdırın ve lobiye, odalara, kahvaltı alanına yerleştirin.
             </p>
             <div class="qr-image" id="qrImage">
-              <div style="color:#666; font-size:.9rem;">Generating QR...</div>
+              <div style="color:#666; font-size:.9rem;">QR oluşturuluyor...</div>
             </div>
             <p class="ig-text-gold ig-mb-md" style="font-family:monospace; font-size:.85rem; word-break:break-all;" id="qrUrl">—</p>
             <div class="ig-flex ig-gap-md ig-justify-center" style="flex-wrap:wrap; justify-content:center;">
-              <button class="ig-btn ig-btn-primary" onclick="window.print()">🖨 Print</button>
-              <a id="qrDownload" download="hotel-qr.png" class="ig-btn ig-btn-secondary">⬇ Download PNG</a>
-              <button class="ig-btn ig-btn-ghost" onclick="copyQrUrl()">📋 Copy URL</button>
+              <button class="ig-btn ig-btn-primary" onclick="window.print()">🖨 Yazdır</button>
+              <a id="qrDownload" download="otel-qr.png" class="ig-btn ig-btn-secondary">⬇ PNG İndir</a>
+              <button class="ig-btn ig-btn-ghost" onclick="copyQrUrl()">📋 URL Kopyala</button>
             </div>
           </div>
 
           <div class="ig-card">
-            <h4 class="ig-mb-md">📋 How it works</h4>
+            <h4 class="ig-mb-md">📋 Nasıl çalışır</h4>
             <ol style="padding-left: 1.5rem; line-height: 1.8;">
-              <li class="ig-text-soft">Print this QR code (A5 lobby, business card for rooms)</li>
-              <li class="ig-text-soft">Place in lobby, rooms, breakfast area, key card holder</li>
-              <li class="ig-text-soft">Guest scans → opens in their language → browses services</li>
-              <li class="ig-text-soft">Guest books → you earn commission, automatically tracked</li>
-              <li class="ig-text-soft">Monthly payout to your IBAN on the 5th</li>
+              <li class="ig-text-soft">Bu QR kodu yazdırın (lobi için A5, odalar için kartvizit boyu)</li>
+              <li class="ig-text-soft">Lobiye, odalara, kahvaltı alanına, anahtar kart kılıfına yerleştirin</li>
+              <li class="ig-text-soft">Misafir okutur → kendi dilinde açılır → hizmetlere göz atar</li>
+              <li class="ig-text-soft">Misafir rezervasyon yapar → siz otomatik komisyon kazanırsınız</li>
+              <li class="ig-text-soft">Her ayın 5'inde IBAN'ınıza ödeme yapılır</li>
             </ol>
           </div>
         </section>
@@ -516,15 +507,9 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 
   <script>
-    // ========================================================================
-    // STATE
-    // ========================================================================
     let currentHotel = null;
     let allBookings = [];
 
-    // ========================================================================
-    // VIEW SWITCHING
-    // ========================================================================
     function showView(name) {
       ['initialLoading', 'loginView', 'unauthorizedView', 'panelView'].forEach(v => {
         document.getElementById(v).classList.add('ig-hidden');
@@ -538,32 +523,23 @@
       showView('loginView');
     }
 
-    // ========================================================================
-    // INIT
-    // ========================================================================
     document.addEventListener('DOMContentLoaded', async () => {
       try {
         const sb = await initSupabase();
         const { data: { user } } = await sb.auth.getUser();
-
         if (!user) {
           showView('loginView');
           setupLoginForm();
           return;
         }
-
         await loadHotelAndShow();
-
       } catch (err) {
-        console.error('Init error:', err);
+        console.error('Init hatası:', err);
         showView('loginView');
         setupLoginForm();
       }
     });
 
-    // ========================================================================
-    // LOAD HOTEL & DECIDE VIEW
-    // ========================================================================
     async function loadHotelAndShow() {
       const sb = await initSupabase();
       const { data: { user } } = await sb.auth.getUser();
@@ -607,9 +583,6 @@
       initPanel();
     }
 
-    // ========================================================================
-    // LOGIN FORM
-    // ========================================================================
     function setupLoginForm() {
       const form = document.getElementById('loginForm');
       if (form.dataset.bound) return;
@@ -621,7 +594,7 @@
         const btn = document.getElementById('loginSubmit');
         errorEl.classList.add('ig-hidden');
         btn.disabled = true;
-        btn.textContent = 'Signing in...';
+        btn.textContent = 'Giriş yapılıyor...';
 
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
@@ -629,30 +602,25 @@
         try {
           const sb = await initSupabase();
           await sb.auth.signOut();
-
           const { data, error } = await sb.auth.signInWithPassword({ email, password });
           if (error) throw error;
-
-          // Login OK, simdi hotel kontrolu
           await loadHotelAndShow();
-
         } catch (err) {
-          errorEl.textContent = err.message || 'Sign in failed';
+          errorEl.textContent = err.message === 'Invalid login credentials' 
+            ? 'E-posta veya şifre hatalı' 
+            : (err.message || 'Giriş başarısız');
           errorEl.classList.remove('ig-hidden');
           btn.disabled = false;
-          btn.textContent = 'Sign in';
+          btn.textContent = 'Giriş yap';
         }
       });
     }
 
-    // ========================================================================
-    // PANEL INIT
-    // ========================================================================
     async function initPanel() {
       try {
         document.getElementById('hotelName').textContent = currentHotel.name;
         document.getElementById('hotelMeta').textContent =
-          `${currentHotel.district || '—'} · ${currentHotel.star_rating || '—'}★ · ${currentHotel.total_rooms || '—'} rooms`;
+          `${currentHotel.district || '—'} · ${currentHotel.star_rating || '—'}★ · ${currentHotel.total_rooms || '—'} oda`;
 
         document.querySelectorAll('.panel-tab').forEach(tab => {
           tab.addEventListener('click', () => {
@@ -667,7 +635,7 @@
         });
 
         document.getElementById('signoutBtn').addEventListener('click', async () => {
-          if (confirm('Sign out?')) {
+          if (confirm('Çıkış yapılsın mı?')) {
             await signOutAndShowLogin();
           }
         });
@@ -676,15 +644,11 @@
         await loadStats();
         loadActiveBookings();
         loadHistory();
-
       } catch (err) {
-        console.error('Panel error:', err);
+        console.error('Panel hatası:', err);
       }
     }
 
-    // ========================================================================
-    // DATA & RENDER (same as before)
-    // ========================================================================
     async function loadAllBookings() {
       try {
         const sb = await initSupabase();
@@ -721,12 +685,12 @@
         if (['pending_payment','confirmed','in_progress'].includes(b.status)) activeCount++;
       });
 
-      document.getElementById('statToday').textContent = todayAmount.toFixed(2) + ' TRY';
-      document.getElementById('statTodayCount').textContent = todayCount + ' booking' + (todayCount !== 1 ? 's' : '');
-      document.getElementById('statMonth').textContent = monthAmount.toFixed(2) + ' TRY';
-      document.getElementById('statMonthCount').textContent = monthCount + ' booking' + (monthCount !== 1 ? 's' : '');
-      document.getElementById('statAll').textContent = allAmount.toFixed(2) + ' TRY';
-      document.getElementById('statAllCount').textContent = allCount + ' booking' + (allCount !== 1 ? 's' : '');
+      document.getElementById('statToday').textContent = todayAmount.toFixed(2) + ' TL';
+      document.getElementById('statTodayCount').textContent = todayCount + ' rezervasyon';
+      document.getElementById('statMonth').textContent = monthAmount.toFixed(2) + ' TL';
+      document.getElementById('statMonthCount').textContent = monthCount + ' rezervasyon';
+      document.getElementById('statAll').textContent = allAmount.toFixed(2) + ' TL';
+      document.getElementById('statAllCount').textContent = allCount + ' rezervasyon';
       document.getElementById('statActive').textContent = activeCount;
     }
 
@@ -736,7 +700,7 @@
         ['pending_payment', 'confirmed', 'in_progress'].includes(b.status)
       ).sort((a, b) => new Date(a.scheduled_at) - new Date(b.scheduled_at));
       if (active.length === 0) {
-        el.innerHTML = `<div class="empty-state"><div style="font-size:3rem; margin-bottom:1rem;">📋</div><p>No active bookings yet</p></div>`;
+        el.innerHTML = `<div class="empty-state"><div style="font-size:3rem; margin-bottom:1rem;">📋</div><p>Henüz aktif rezervasyon yok</p></div>`;
         return;
       }
       el.innerHTML = active.map(renderBookingCard).join('');
@@ -748,16 +712,32 @@
         ['completed', 'cancelled', 'no_show', 'refunded'].includes(b.status)
       );
       if (past.length === 0) {
-        el.innerHTML = '<div class="empty-state">No past bookings yet</div>';
+        el.innerHTML = '<div class="empty-state">Henüz geçmiş rezervasyon yok</div>';
         return;
       }
       el.innerHTML = past.slice(0, 50).map(renderBookingCard).join('');
     }
 
+    function statusLabel(s) {
+      const map = {
+        'pending_payment': 'Ödeme bekliyor',
+        'confirmed': 'Onaylandı',
+        'in_progress': 'Devam ediyor',
+        'completed': 'Tamamlandı',
+        'cancelled': 'İptal edildi',
+        'no_show': 'Gelmedi',
+        'refunded': 'İade edildi',
+        'failed': 'Başarısız',
+        'paid': 'Ödendi',
+        'pending': 'Ödenmedi'
+      };
+      return map[s] || s;
+    }
+
     function renderBookingCard(b) {
       const date = new Date(b.scheduled_at);
-      const dateStr = date.toLocaleDateString('en', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
-      const timeStr = date.toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit' });
+      const dateStr = date.toLocaleDateString('tr-TR', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+      const timeStr = date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
       const langFlag = { tr:'🇹🇷', en:'🇬🇧', ar:'🇸🇦', ru:'🇷🇺' }[b.contact_lang] || '';
       const total = parseFloat(b.total_amount || 0);
       const providerAmt = parseFloat(b.provider_amount || 0);
@@ -777,27 +757,27 @@
             <p class="ig-text-soft" style="font-size:.85rem;">${escapeHtml(b.providers?.name || '—')}</p>
           </div>
           <div style="text-align:right;">
-            <span class="ig-badge ig-badge-${badgeClass(b.status)}">${b.status}</span>
-            ${b.payment_status === 'paid' ? '<br><span class="ig-badge ig-badge-success" style="margin-top:.25rem;">paid</span>' : ''}
-            ${b.payment_status === 'pending' ? '<br><span class="ig-badge ig-badge-warning" style="margin-top:.25rem;">unpaid</span>' : ''}
+            <span class="ig-badge ig-badge-${badgeClass(b.status)}">${statusLabel(b.status)}</span>
+            ${b.payment_status === 'paid' ? '<br><span class="ig-badge ig-badge-success" style="margin-top:.25rem;">Ödendi</span>' : ''}
+            ${b.payment_status === 'pending' ? '<br><span class="ig-badge ig-badge-warning" style="margin-top:.25rem;">Ödenmedi</span>' : ''}
           </div>
         </div>
         ${b.profiles?.full_name ? `<div style="padding:.5rem 0; border-top:1px solid var(--ig-border-soft); border-bottom:1px solid var(--ig-border-soft); margin-bottom:1rem;"><strong>${escapeHtml(b.profiles.full_name)}</strong> ${langFlag}${b.contact_phone ? ` · <a href="tel:${b.contact_phone}" class="ig-text-gold" style="font-size:.85rem;">${escapeHtml(b.contact_phone)}</a>` : ''}</div>` : ''}
         <div class="booking-meta">
-          <div class="meta-item"><span class="meta-label">Date</span><span class="meta-value">${dateStr}</span></div>
-          <div class="meta-item"><span class="meta-label">Time</span><span class="meta-value">${timeStr}</span></div>
-          <div class="meta-item"><span class="meta-label">Persons</span><span class="meta-value">${b.num_persons}</span></div>
-          <div class="meta-item"><span class="meta-label">Customer paid</span><span class="meta-value"><strong>${total.toFixed(2)} ${b.currency}</strong></span></div>
+          <div class="meta-item"><span class="meta-label">Tarih</span><span class="meta-value">${dateStr}</span></div>
+          <div class="meta-item"><span class="meta-label">Saat</span><span class="meta-value">${timeStr}</span></div>
+          <div class="meta-item"><span class="meta-label">Kişi</span><span class="meta-value">${b.num_persons}</span></div>
+          <div class="meta-item"><span class="meta-label">Müşteri ödedi</span><span class="meta-value"><strong>${total.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</strong></span></div>
         </div>
         <div class="commission-breakdown">
-          <div class="breakdown-title">📊 Where every penny goes</div>
-          <div class="breakdown-row"><span><span class="breakdown-percent">${pctProvider}%</span>${escapeHtml(b.providers?.name || 'Service provider')}</span><span>${providerAmt.toFixed(2)} ${b.currency}</span></div>
-          <div class="breakdown-row your-row"><span><span class="breakdown-percent">${pctHotel}%</span>Your hotel</span><span>+${hotelAmt.toFixed(2)} ${b.currency}</span></div>
-          ${recepAmt > 0 ? `<div class="breakdown-row"><span><span class="breakdown-percent">${pctRecep}%</span>Receptionist</span><span>${recepAmt.toFixed(2)} ${b.currency}</span></div>` : ''}
-          <div class="breakdown-row"><span><span class="breakdown-percent">${pctPlatform}%</span>Istanbul Guardian platform</span><span>${platformAmt.toFixed(2)} ${b.currency}</span></div>
-          <div class="breakdown-row total-row"><span>Total</span><span>${total.toFixed(2)} ${b.currency}</span></div>
+          <div class="breakdown-title">📊 Tutar nereye gidiyor</div>
+          <div class="breakdown-row"><span><span class="breakdown-percent">${pctProvider}%</span>${escapeHtml(b.providers?.name || 'Hizmet sağlayıcı')}</span><span>${providerAmt.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</span></div>
+          <div class="breakdown-row your-row"><span><span class="breakdown-percent">${pctHotel}%</span>Oteliniz</span><span>+${hotelAmt.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</span></div>
+          ${recepAmt > 0 ? `<div class="breakdown-row"><span><span class="breakdown-percent">${pctRecep}%</span>Resepsiyonist</span><span>${recepAmt.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</span></div>` : ''}
+          <div class="breakdown-row"><span><span class="breakdown-percent">${pctPlatform}%</span>Istanbul Guardian platform</span><span>${platformAmt.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</span></div>
+          <div class="breakdown-row total-row"><span>Toplam</span><span>${total.toFixed(2)} ${b.currency === 'TRY' ? 'TL' : b.currency}</span></div>
         </div>
-        ${b.special_requests ? `<div style="margin-top:1rem; padding:.75rem; background:var(--ig-bg-soft); border-radius:var(--ig-radius-sm); font-size:.85rem;"><strong style="color:var(--ig-text-soft);">Guest note:</strong> ${escapeHtml(b.special_requests)}</div>` : ''}
+        ${b.special_requests ? `<div style="margin-top:1rem; padding:.75rem; background:var(--ig-bg-soft); border-radius:var(--ig-radius-sm); font-size:.85rem;"><strong style="color:var(--ig-text-soft);">Misafir notu:</strong> ${escapeHtml(b.special_requests)}</div>` : ''}
       </div>`;
     }
 
@@ -821,9 +801,9 @@
       document.getElementById('infoName').textContent = currentHotel.name;
       document.getElementById('infoSlug').textContent = currentHotel.slug;
       document.getElementById('infoDistrict').textContent = currentHotel.district || '—';
-      document.getElementById('infoActive').textContent = currentHotel.is_active ? '✓ Active' : '✗ Inactive';
+      document.getElementById('infoActive').textContent = currentHotel.is_active ? '✓ Aktif' : '✗ Pasif';
       document.getElementById('infoLangs').textContent = (currentHotel.primary_languages || []).join(', ').toUpperCase() || '—';
-      document.getElementById('hotelIban').textContent = currentHotel.payout_iban || 'Not set — contact admin';
+      document.getElementById('hotelIban').textContent = currentHotel.payout_iban || 'Henüz tanımlanmadı — admin ile iletişime geçin';
     }
 
     function populateStatement() {
@@ -841,7 +821,7 @@
       if (!sortedMonths.includes(currentYM)) sortedMonths.unshift(currentYM);
       select.innerHTML = sortedMonths.map(ym => {
         const [y, m] = ym.split('-');
-        const label = new Date(parseInt(y), parseInt(m) - 1).toLocaleDateString('en', { month: 'long', year: 'numeric' });
+        const label = new Date(parseInt(y), parseInt(m) - 1).toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' });
         return `<option value="${ym}">${label}</option>`;
       }).join('');
       select.onchange = () => renderStatement(select.value);
@@ -860,19 +840,19 @@
       const grossTotal = paid.reduce((s, b) => s + parseFloat(b.total_amount || 0), 0);
       const yourTotal = paid.reduce((s, b) => s + parseFloat(b.hotel_amount || 0), 0);
       document.getElementById('stmtCount').textContent = paid.length;
-      document.getElementById('stmtGross').textContent = grossTotal.toFixed(2) + ' TRY';
-      document.getElementById('stmtYours').textContent = yourTotal.toFixed(2) + ' TRY';
+      document.getElementById('stmtGross').textContent = grossTotal.toFixed(2) + ' TL';
+      document.getElementById('stmtYours').textContent = yourTotal.toFixed(2) + ' TL';
       const now = new Date();
       const payoutDate = new Date(y, m, 5);
       let status;
-      if (paid.length === 0) status = '<span class="ig-text-dim">No data</span>';
-      else if (now < monthEnd) status = '<span style="color:var(--ig-warning);">In progress</span>';
-      else if (now < payoutDate) status = '<span style="color:var(--ig-warning);">Pending payout</span>';
-      else status = '<span style="color:var(--ig-success);">Paid out</span>';
+      if (paid.length === 0) status = '<span class="ig-text-dim">Veri yok</span>';
+      else if (now < monthEnd) status = '<span style="color:var(--ig-warning);">Devam ediyor</span>';
+      else if (now < payoutDate) status = '<span style="color:var(--ig-warning);">Ödeme bekliyor</span>';
+      else status = '<span style="color:var(--ig-success);">Ödendi</span>';
       document.getElementById('stmtStatus').innerHTML = status;
       const listEl = document.getElementById('statementList');
       if (monthBookings.length === 0) {
-        listEl.innerHTML = '<div class="empty-state">No bookings in this month</div>';
+        listEl.innerHTML = '<div class="empty-state">Bu ay için rezervasyon yok</div>';
         return;
       }
       listEl.innerHTML = monthBookings.map(renderBookingCard).join('');
@@ -889,7 +869,7 @@
         const d = new Date(b.scheduled_at);
         return d >= monthStart && d < monthEnd;
       });
-      const headers = ['Booking No','Date','Service','Provider','Persons','Total','Currency','Hotel earnings','Status','Payment'];
+      const headers = ['Rezervasyon No','Tarih','Hizmet','Sağlayıcı','Kişi','Toplam','Para Birimi','Otel Kazancı','Durum','Ödeme'];
       const rows = monthBookings.map(b => [
         b.booking_no,
         new Date(b.scheduled_at).toISOString().split('T')[0],
@@ -902,7 +882,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${currentHotel.slug}-statement-${ym}.csv`;
+      a.download = `${currentHotel.slug}-hesap-ozeti-${ym}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -923,13 +903,13 @@
         document.getElementById('qrDownload').href = dataUrl;
         document.getElementById('qrDownload').download = `qr-${currentHotel.slug}.png`;
       } catch (err) {
-        qrEl.innerHTML = '<p style="color:#666;">QR generation failed</p>';
+        qrEl.innerHTML = '<p style="color:#666;">QR oluşturulamadı</p>';
       }
     }
 
     function copyQrUrl() {
       const url = document.getElementById('qrUrl').textContent;
-      navigator.clipboard.writeText(url).then(() => alert('URL copied'));
+      navigator.clipboard.writeText(url).then(() => alert('URL kopyalandı'));
     }
 
     function badgeClass(s) {
