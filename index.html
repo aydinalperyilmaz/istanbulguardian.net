@@ -12,85 +12,58 @@
     body { background: var(--ig-bg); }
 
     .lang-switcher {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      display: flex;
-      gap: 0.25rem;
-      z-index: 50;
+      position: fixed; top: 1rem; right: 1rem;
+      display: flex; gap: 0.25rem; z-index: 50;
       background: rgba(10, 20, 40, 0.7);
       backdrop-filter: blur(8px);
-      padding: 0.25rem;
-      border-radius: 8px;
+      padding: 0.25rem; border-radius: 8px;
       border: 1px solid var(--ig-border);
     }
     .lang-btn {
-      background: transparent;
-      border: none;
+      background: transparent; border: none;
       color: var(--ig-text-soft);
-      padding: 0.4rem 0.75rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
-      transition: all 0.2s;
+      padding: 0.4rem 0.75rem; border-radius: 6px;
+      cursor: pointer; font-size: 0.8rem;
+      font-weight: 600; transition: all 0.2s;
     }
     .lang-btn.active { background: var(--ig-gold); color: var(--ig-bg); }
 
     .qr-required-overlay {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      min-height: 100vh; display: flex;
+      align-items: center; justify-content: center;
       padding: 2rem 1rem;
       background:
         linear-gradient(rgba(10, 20, 40, 0.85), rgba(10, 20, 40, 0.95)),
         url('https://images.unsplash.com/photo-1527838832700-5059252407fa?w=1600&q=80') center/cover;
     }
     .qr-required-card {
-      max-width: 480px;
-      width: 100%;
+      max-width: 480px; width: 100%;
       background: var(--ig-surface);
       border: 1px solid var(--ig-gold);
       border-radius: var(--ig-radius-md);
-      padding: 3rem 2.5rem;
-      text-align: center;
+      padding: 3rem 2.5rem; text-align: center;
     }
 
-    /* User badge (giriş yapmışsa üstte) */
     .user-badge {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
+      position: fixed; top: 1rem; left: 1rem;
       background: rgba(10, 20, 40, 0.7);
       backdrop-filter: blur(8px);
       border: 1px solid var(--ig-border);
       border-radius: 8px;
       padding: 0.5rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      z-index: 50;
-      font-size: 0.85rem;
-      color: var(--ig-text);
+      display: flex; align-items: center; gap: 0.75rem;
+      z-index: 50; font-size: 0.85rem; color: var(--ig-text);
     }
     .user-badge button {
-      background: transparent;
-      border: none;
-      color: var(--ig-gold);
-      cursor: pointer;
-      font-size: 0.8rem;
-      padding: 0;
+      background: transparent; border: none;
+      color: var(--ig-gold); cursor: pointer;
+      font-size: 0.8rem; padding: 0;
       text-decoration: underline;
     }
 
-    /* HERO */
     .hero-wrapper {
-      position: relative;
-      min-height: 70vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative; min-height: 70vh;
+      display: flex; align-items: center; justify-content: center;
       padding: 5rem 1.5rem 4rem;
       background:
         linear-gradient(180deg, rgba(10, 20, 40, 0.5) 0%, rgba(10, 20, 40, 0.85) 100%),
@@ -100,60 +73,44 @@
     .hero-content { max-width: 720px; text-align: center; position: relative; z-index: 1; }
     .hero-overline {
       font-family: var(--ig-font-display);
-      color: var(--ig-gold);
-      font-size: 0.9rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      font-style: italic;
+      color: var(--ig-gold); font-size: 0.9rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      margin-bottom: 1.5rem; font-style: italic;
     }
     .hero-title {
       font-family: var(--ig-font-display);
       font-size: clamp(2.5rem, 6vw, 4.5rem);
-      color: var(--ig-text);
-      line-height: 1.05;
-      margin-bottom: 1.5rem;
-      font-weight: 500;
+      color: var(--ig-text); line-height: 1.05;
+      margin-bottom: 1.5rem; font-weight: 500;
     }
     .hero-title em { color: var(--ig-gold); font-style: italic; }
     .hero-subtitle {
-      color: var(--ig-text-soft);
-      font-size: 1.15rem;
-      line-height: 1.6;
-      max-width: 540px;
-      margin: 0 auto 2.5rem;
+      color: var(--ig-text-soft); font-size: 1.15rem;
+      line-height: 1.6; max-width: 540px; margin: 0 auto 2.5rem;
     }
     .hotel-card {
-      display: inline-flex;
-      align-items: center;
-      gap: 1rem;
+      display: inline-flex; align-items: center; gap: 1rem;
       background: rgba(20, 30, 50, 0.7);
       backdrop-filter: blur(12px);
       border: 1px solid var(--ig-gold);
       border-radius: var(--ig-radius-md);
-      padding: 1rem 1.5rem;
-      margin-bottom: 2rem;
+      padding: 1rem 1.5rem; margin-bottom: 2rem;
     }
     .hotel-card-icon { font-size: 1.75rem; flex-shrink: 0; }
     .hotel-card-text { text-align: left; }
     .hotel-card-label {
-      font-size: 0.7rem;
-      color: var(--ig-gold);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
+      font-size: 0.7rem; color: var(--ig-gold);
+      text-transform: uppercase; letter-spacing: 0.15em;
       margin-bottom: 0.15rem;
     }
     .hotel-card-name {
-      color: var(--ig-text);
-      font-family: var(--ig-font-display);
+      color: var(--ig-text); font-family: var(--ig-font-display);
       font-size: 1.1rem;
     }
 
-    /* AI CTA */
     .ai-section { max-width: 720px; margin: -2rem auto 0; padding: 0 1.5rem; position: relative; z-index: 2; }
     .ai-cta {
-      display: block;
-      text-decoration: none;
+      display: block; text-decoration: none;
       background: linear-gradient(135deg, var(--ig-surface) 0%, var(--ig-surface-2) 100%);
       border: 1px solid var(--ig-gold);
       border-radius: var(--ig-radius-md);
@@ -166,31 +123,21 @@
     .ai-cta-sparkle { font-size: 2.5rem; flex-shrink: 0; }
     .ai-cta-content { flex: 1; }
     .ai-cta-label {
-      font-size: 0.7rem;
-      color: var(--ig-gold);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-bottom: 0.35rem;
-      font-weight: 600;
+      font-size: 0.7rem; color: var(--ig-gold);
+      text-transform: uppercase; letter-spacing: 0.15em;
+      margin-bottom: 0.35rem; font-weight: 600;
     }
     .ai-cta-title {
       font-family: var(--ig-font-display);
-      font-size: 1.4rem;
-      color: var(--ig-text);
+      font-size: 1.4rem; color: var(--ig-text);
       margin-bottom: 0.25rem;
     }
     .ai-cta-subtitle { color: var(--ig-text-soft); font-size: 0.9rem; }
     .ai-cta-arrow { color: var(--ig-gold); font-size: 1.5rem; flex-shrink: 0; }
 
-    /* MY BOOKINGS (giriş yapan kullanıcı için) */
-    .bookings-section {
-      max-width: 720px;
-      margin: 3rem auto 0;
-      padding: 0 1.5rem;
-    }
+    .bookings-section { max-width: 720px; margin: 3rem auto 0; padding: 0 1.5rem; }
     .booking-card {
-      display: block;
-      text-decoration: none;
+      display: block; text-decoration: none;
       background: var(--ig-surface);
       border: 1px solid var(--ig-border);
       border-radius: var(--ig-radius-md);
@@ -200,27 +147,20 @@
     }
     .booking-card:hover { border-color: var(--ig-gold); }
     .booking-card-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 1rem;
     }
 
-    /* CATEGORIES */
     .categories-section { max-width: 1100px; margin: 4rem auto; padding: 0 1.5rem; }
     .section-header { text-align: center; margin-bottom: 2.5rem; }
     .section-overline {
-      color: var(--ig-gold);
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      margin-bottom: 0.75rem;
-      font-weight: 600;
+      color: var(--ig-gold); font-size: 0.7rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      margin-bottom: 0.75rem; font-weight: 600;
     }
     .section-title {
       font-family: var(--ig-font-display);
-      font-size: 2.25rem;
-      color: var(--ig-text);
+      font-size: 2.25rem; color: var(--ig-text);
       margin-bottom: 0.5rem;
     }
     .section-subtitle { color: var(--ig-text-soft); font-size: 1rem; }
@@ -230,13 +170,11 @@
       gap: 1.25rem;
     }
     .category-card {
-      display: block;
-      text-decoration: none;
+      display: block; text-decoration: none;
       background: var(--ig-surface);
       border: 1px solid var(--ig-border);
       border-radius: var(--ig-radius-md);
-      overflow: hidden;
-      transition: all 0.3s;
+      overflow: hidden; transition: all 0.3s;
       cursor: pointer;
     }
     .category-card:hover {
@@ -245,27 +183,22 @@
       box-shadow: 0 12px 40px rgba(201, 169, 97, 0.15);
     }
     .category-image {
-      width: 100%;
-      height: 180px;
+      width: 100%; height: 180px;
       background: var(--ig-surface-2) center/cover;
       position: relative;
     }
     .category-image::after {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background: linear-gradient(180deg, transparent 40%, rgba(10, 20, 40, 0.85) 100%);
     }
     .category-content { padding: 1.25rem 1.5rem 1.5rem; }
     .category-title {
       font-family: var(--ig-font-display);
-      font-size: 1.4rem;
-      color: var(--ig-text);
+      font-size: 1.4rem; color: var(--ig-text);
       margin-bottom: 0.4rem;
     }
     .category-desc { color: var(--ig-text-soft); font-size: 0.875rem; line-height: 1.5; }
 
-    /* TRUST */
     .trust-section {
       background: linear-gradient(135deg, var(--ig-surface) 0%, var(--ig-bg) 100%);
       padding: 4rem 1.5rem;
@@ -276,31 +209,25 @@
     .trust-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2.5rem;
-      margin-top: 2.5rem;
+      gap: 2.5rem; margin-top: 2.5rem;
     }
     .trust-feature { text-align: center; }
     .trust-icon {
-      width: 60px;
-      height: 60px;
+      width: 60px; height: 60px;
       margin: 0 auto 1rem;
       background: rgba(201, 169, 97, 0.1);
       border: 1px solid var(--ig-gold);
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 1.75rem;
     }
     .trust-feature-title {
       font-family: var(--ig-font-display);
-      font-size: 1.15rem;
-      color: var(--ig-text);
+      font-size: 1.15rem; color: var(--ig-text);
       margin-bottom: 0.5rem;
     }
     .trust-feature-desc { color: var(--ig-text-soft); font-size: 0.875rem; line-height: 1.6; }
 
-    /* AUTH (giriş yapmamış kullanıcılar için) */
     .auth-section { max-width: 480px; margin: 4rem auto; padding: 0 1.5rem; }
     .auth-card {
       background: var(--ig-surface);
@@ -309,28 +236,20 @@
       padding: 2rem;
     }
     .auth-tabs {
-      display: flex;
-      gap: 0.5rem;
+      display: flex; gap: 0.5rem;
       margin-bottom: 1.5rem;
       background: var(--ig-bg-soft);
-      padding: 4px;
-      border-radius: 8px;
+      padding: 4px; border-radius: 8px;
     }
     .auth-tab {
-      flex: 1;
-      background: transparent;
-      border: none;
+      flex: 1; background: transparent; border: none;
       color: var(--ig-text-soft);
-      padding: 0.6rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 600;
-      transition: all 0.2s;
+      padding: 0.6rem; border-radius: 6px;
+      cursor: pointer; font-size: 0.875rem;
+      font-weight: 600; transition: all 0.2s;
     }
     .auth-tab.active { background: var(--ig-surface); color: var(--ig-gold); }
 
-    /* FOOTER */
     .footer {
       background: var(--ig-bg);
       border-top: 1px solid var(--ig-border-soft);
@@ -341,8 +260,7 @@
     .footer-brand span { color: var(--ig-gold); }
     .footer-tagline { color: var(--ig-text-soft); font-size: 0.875rem; max-width: 480px; margin: 0 auto 1.5rem; }
     .footer-links {
-      display: flex;
-      flex-wrap: wrap;
+      display: flex; flex-wrap: wrap;
       justify-content: center;
       gap: 1rem 2rem;
       margin-bottom: 1.5rem;
@@ -351,8 +269,7 @@
     .footer-links a { color: var(--ig-text-soft); text-decoration: none; }
     .footer-links a:hover { color: var(--ig-gold); }
     .footer-meta {
-      color: var(--ig-text-dim);
-      font-size: 0.75rem;
+      color: var(--ig-text-dim); font-size: 0.75rem;
       padding-top: 1.5rem;
       border-top: 1px solid var(--ig-border-soft);
     }
@@ -380,7 +297,6 @@
     <button class="lang-btn" data-lang="ru">RU</button>
   </div>
 
-  <!-- User badge (eğer giriş yapmışsa görünür) -->
   <div id="userBadge" class="user-badge ig-hidden">
     <span>👋</span>
     <span id="userBadgeName">—</span>
@@ -391,7 +307,6 @@
     <div class="ig-loader ig-loader-large"></div>
   </div>
 
-  <!-- QR şart sayfası -->
   <div id="qrRequiredView" class="ig-hidden qr-required-overlay">
     <div class="qr-required-card">
       <div style="font-size:3.5rem; margin-bottom:1rem;">📱</div>
@@ -406,7 +321,6 @@
     </div>
   </div>
 
-  <!-- Ana view -->
   <div id="mainView" class="ig-hidden">
 
     <section class="hero-wrapper">
@@ -443,7 +357,6 @@
       </a>
     </section>
 
-    <!-- Aktif rezervasyonlar (sadece giriş yapmış kullanıcı için) -->
     <section id="bookingsSection" class="bookings-section ig-hidden">
       <div class="section-overline ig-mb-md" data-i18n="bookings_label">YOUR BOOKINGS</div>
       <div id="bookingsList"></div>
@@ -533,7 +446,6 @@
       </div>
     </section>
 
-    <!-- Auth section (sadece giriş yapmamış kullanıcı için) -->
     <section id="authSection" class="auth-section ig-hidden">
       <div class="auth-card">
         <div class="section-header" style="margin-bottom:1.5rem;">
@@ -705,12 +617,14 @@
       document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
       });
-      localStorage.setItem('ig_lang', lang);
+      try { localStorage.setItem('ig_lang', lang); } catch(e) {}
     }
 
     function detectLang() {
-      const saved = localStorage.getItem('ig_lang');
-      if (saved && I18N[saved]) return saved;
+      try {
+        const saved = localStorage.getItem('ig_lang');
+        if (saved && I18N[saved]) return saved;
+      } catch(e) {}
       const browser = (navigator.language || 'en').slice(0, 2);
       if (I18N[browser]) return browser;
       return 'en';
@@ -735,7 +649,6 @@
       try {
         const sb = await initSupabase();
 
-        // Hotel'i çek
         const { data: hotel } = await sb.from('hotels')
           .select('id, name, slug, district, primary_languages')
           .eq('slug', hotelSlug).eq('is_active', true).maybeSingle();
@@ -747,30 +660,27 @@
         }
         currentHotel = hotel;
 
-        // Otelin desteklediği dile geç
         if (hotel.primary_languages && hotel.primary_languages.length > 0) {
           const browserLang = detectLang();
           const supported = hotel.primary_languages.includes(browserLang) ? browserLang : hotel.primary_languages[0];
           if (supported && supported !== currentLang) applyLang(supported);
         }
 
-        // Otel adı
         document.getElementById('hotelName').textContent = `${hotel.name}${hotel.district ? ' · ' + hotel.district : ''}`;
 
-        // Kullanıcı var mı?
         const { data: { user } } = await sb.auth.getUser();
         currentUser = user;
 
-        if (user) {
-          // Giriş yapmış kullanıcı
-          await showSignedInState();
-        } else {
-          // Giriş yapmamış kullanıcı
-          showSignedOutState();
-        }
-
+        // ÖNCE main view'i göster, SONRA detayları yükle
         document.getElementById('loadingState').classList.add('ig-hidden');
         document.getElementById('mainView').classList.remove('ig-hidden');
+
+        if (user) {
+          showSignedInState();
+          loadProfileAndBookings(); // arka planda yüklesin, takılırsa sayfa engellenmesin
+        } else {
+          showSignedOutState();
+        }
 
         setupNavigation();
         setupForms();
@@ -778,56 +688,47 @@
       } catch (err) {
         console.error('Init hatası:', err);
         document.getElementById('loadingState').classList.add('ig-hidden');
-        document.getElementById('qrRequiredView').classList.remove('ig-hidden');
+        document.getElementById('mainView').classList.remove('ig-hidden');
+        showSignedOutState();
+        setupNavigation();
+        setupForms();
       }
     });
 
-    async function showSignedInState() {
-      const sb = await initSupabase();
-
-      // Profil bilgisi
-      const { data: profile } = await sb.from('profiles')
-        .select('full_name, preferred_lang')
-        .eq('id', currentUser.id).maybeSingle();
-
-      const userName = profile?.full_name || currentUser.email.split('@')[0];
-
-      // User badge göster
+    function showSignedInState() {
+      const userName = currentUser.email.split('@')[0];
       document.getElementById('userBadgeName').textContent = userName;
       document.getElementById('userBadge').classList.remove('ig-hidden');
-
-      // Hero'da ismini göster (opsiyonel kişiselleştirme)
-      const dict = I18N[currentLang];
-      const heroGreeting = document.getElementById('heroGreeting');
-      const heroName = document.getElementById('heroName');
-      const greetMap = { en: 'Welcome,', tr: 'Hoş geldin,', ar: 'مرحباً،', ru: 'Привет,' };
-      heroGreeting.textContent = greetMap[currentLang] || 'Welcome,';
-      heroName.textContent = userName.split(' ')[0]; // sadece ilk isim
-
-      // Auth section'ı gizle
       document.getElementById('authSection').classList.add('ig-hidden');
 
-      // Profili güncelle (otel bağlantısını kur)
-      await sb.from('profiles').update({ hotel_id: currentHotel.id }).eq('id', currentUser.id);
+      const greetMap = { en: 'Welcome,', tr: 'Hoş geldin,', ar: 'مرحباً،', ru: 'Привет,' };
+      document.getElementById('heroGreeting').textContent = greetMap[currentLang] || 'Welcome,';
+      document.getElementById('heroName').textContent = userName.split(' ')[0];
 
-      // Aktif rezervasyonları yükle
-      await loadBookings();
-
-      // Sign out butonu
       document.getElementById('signOutBtn').addEventListener('click', async () => {
+        const sb = await initSupabase();
         await sb.auth.signOut();
         window.location.reload();
       });
     }
 
     function showSignedOutState() {
-      // Auth section'ı göster
       document.getElementById('authSection').classList.remove('ig-hidden');
     }
 
-    async function loadBookings() {
+    async function loadProfileAndBookings() {
       try {
         const sb = await initSupabase();
+
+        const { data: profile } = await sb.from('profiles')
+          .select('full_name')
+          .eq('id', currentUser.id).maybeSingle();
+
+        if (profile?.full_name) {
+          document.getElementById('userBadgeName').textContent = profile.full_name;
+          document.getElementById('heroName').textContent = profile.full_name.split(' ')[0];
+        }
+
         const { data: bookings } = await sb.from('bookings')
           .select('id, booking_no, scheduled_at, status, total_amount, currency, services(name)')
           .eq('tourist_profile_id', currentUser.id)
@@ -836,16 +737,14 @@
 
         if (!bookings || bookings.length === 0) return;
 
-        const section = document.getElementById('bookingsSection');
         const list = document.getElementById('bookingsList');
-
         list.innerHTML = bookings.map(b => {
           const date = new Date(b.scheduled_at);
           const dateStr = date.toLocaleString(currentLang === 'tr' ? 'tr-TR' : 'en', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
           const cur = b.currency === 'TRY' ? 'TL' : b.currency;
           const statusLabels = {
-            tr: { pending_payment:'Ödeme bekliyor', confirmed:'Onaylandı', completed:'Tamamlandı', cancelled:'İptal', in_progress:'Devam ediyor' },
-            en: { pending_payment:'Pending payment', confirmed:'Confirmed', completed:'Completed', cancelled:'Cancelled', in_progress:'In progress' }
+            tr: { pending_payment:'Ödeme bekliyor', confirmed:'Onaylandı', completed:'Tamamlandı', cancelled:'İptal', in_progress:'Devam ediyor', no_show:'Gelmedi' },
+            en: { pending_payment:'Pending', confirmed:'Confirmed', completed:'Completed', cancelled:'Cancelled', in_progress:'In progress', no_show:'No show' }
           };
           const statusLabel = (statusLabels[currentLang] || statusLabels.en)[b.status] || b.status;
           const badgeClass = ['confirmed','completed'].includes(b.status) ? 'success' : (['cancelled','no_show'].includes(b.status) ? 'danger' : 'warning');
@@ -861,8 +760,8 @@
           </a>`;
         }).join('');
 
-        section.classList.remove('ig-hidden');
-      } catch (e) { console.error('Booking yüklenemedi:', e); }
+        document.getElementById('bookingsSection').classList.remove('ig-hidden');
+      } catch (e) { console.error('Profile/booking yüklenemedi:', e); }
     }
 
     function setupNavigation() {
@@ -922,8 +821,7 @@
               email: document.getElementById('suEmail').value.trim(),
               phone: document.getElementById('suPhone').value.trim() || null,
               preferred_lang: currentLang,
-              role: 'tourist',
-              hotel_id: currentHotel.id
+              role: 'tourist'
             });
           }
           window.location.reload();
