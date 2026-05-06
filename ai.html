@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a1428">
+  <title>Istanbul Guardian — AI Guide</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%E2%9A%93%3C/text%3E%3C/svg%3E">
+
+  <style>
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 80px);
+      max-height: 700px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--ig-space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--ig-space-md);
+    }
+
+    .chat-msg {
+      max-width: 85%;
+      padding: var(--ig-space-md);
+      border-radius: var(--ig-radius-md);
+      animation: ig-fade-in 0.4s ease both;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      background: var(--ig-gold);
+      color: var(--ig-bg);
+      border-bottom-right-radius: var(--ig-radius-sm);
+    }
+
+    .chat-msg.assistant {
+      align-self: flex-start;
+      background: var(--ig-surface);
+      color: var(--ig-text);
+      border: 1px solid var(--ig-border);
+      border-bottom-left-radius: var(--ig-radius-sm);
+    }
+
+    .chat-msg.assistant a {
+      color: var(--ig-gold);
+      text-decoration: underline;
+    }
+
+    .chat-msg.system {
+      align-self: center;
+      background: rgba(212, 160, 74, 0.1);
+      color: var(--ig-warning);
+      border: 1px solid rgba(212, 160, 74, 0.3);
+      font-size: 0.85rem;
+      text-align: center;
+      max-width: 100%;
+    }
+
+    .chat-msg.error {
+      align-self: center;
+      background: rgba(198, 107, 90, 0.1);
+      color: var(--ig-danger);
+      border: 1px solid rgba(198, 107, 90, 0.3);
+      font-size: 0.85rem;
+      text-align: center;
+      max-width: 100%;
+    }
+
+    .chat-input-area {
+      border-top: 1px solid var(--ig-border);
+      padding: var(--ig-space-md);
+      background: var(--ig-bg);
+      display: flex;
+      gap: var(--ig-space-sm);
+      align-items: flex-end;
+    }
+
+    .chat-input {
+      flex: 1;
+      min-height: 44px;
+      max-height: 120px;
+      resize: none;
+      padding: var(--ig-space-md);
+      background: var(--ig-bg-soft);
+      border: 1px solid var(--ig-border);
+      border-radius: var(--ig-radius-md);
+      color: var(--ig-text);
+      font-size: 0.95rem;
+      font-family: var(--ig-font-body);
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--ig-gold);
+    }
+
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--ig-radius-md);
+      background: var(--ig-gold);
+      color: var(--ig-bg);
+      border: none;
+      cursor: pointer;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all var(--ig-transition);
+    }
+
+    .send-btn:hover {
+      background: var(--ig-gold-light);
+    }
+
+    .send-btn:disabled {
+      background: var(--ig-gold-dim);
+      cursor: not-allowed;
+    }
+
+    .suggestion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--ig-space-sm);
+      padding: var(--ig-space-md);
+    }
+
+    .chip {
+      background: var(--ig-surface);
+      border: 1px solid var(--ig-border);
+      color: var(--ig-text-soft);
+      padding: 0.5rem 1rem;
+      border-radius: var(--ig-radius-full);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all var(--ig-transition);
+    }
+
+    .chip:hover {
+      border-color: var(--ig-gold);
+      color: var(--ig-gold);
+    }
+
+    .typing {
+      display: inline-flex;
+      gap: 4px;
+      padding: var(--ig-space-md);
+    }
+
+    .typing span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ig-gold);
+      animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+      30% { opacity: 1; transform: translateY(-6px); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="ig-nav">
+    <a href="index.html" class="ig-nav-brand" style="text-decoration:none;">
+      ← Istanbul <span>Guardian</span>
+    </a>
+    <div class="ig-lang-switcher">
+      <button class="ig-lang-btn" data-lang="tr">TR</button>
+      <button class="ig-lang-btn" data-lang="en">EN</button>
+      <button class="ig-lang-btn" data-lang="ar">عر</button>
+      <button class="ig-lang-btn" data-lang="ru">RU</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="ig-container ig-container-sm">
+
+      <section class="ig-text-center ig-mt-lg ig-mb-md ig-fade-in">
+        <div class="ig-overline ig-mb-xs">✨ AI ASSISTANT</div>
+        <h2 class="ig-display" data-i18n="ai.title">Your AI Guide</h2>
+      </section>
+
+      <div class="ig-card chat-container" style="padding:0; overflow:hidden;">
+
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg assistant" id="welcomeMsg">
+            <strong>Welcome! 👋</strong><br>
+            I'm your AI guide for Istanbul. Ask me what to do, where to eat,
+            or how to plan your day. I'll suggest activities you can book directly.
+          </div>
+        </div>
+
+        <div class="suggestion-chips" id="suggestionChips">
+          <button class="chip" data-prompt="What should I do today?">What should I do today?</button>
+          <button class="chip" data-prompt="Suggest a 3-day plan">3-day plan</button>
+          <button class="chip" data-prompt="Where to eat tonight?">Dinner ideas</button>
+          <button class="chip" data-prompt="I'm tired, suggest a hammam">Hammam recommendation</button>
+        </div>
+
+        <div class="chat-input-area">
+          <textarea
+            id="chatInput"
+            class="chat-input"
+            data-i18n-placeholder="ai.placeholder"
+            placeholder="What should I do today?"
+            rows="1"></textarea>
+          <button id="sendBtn" class="send-btn" aria-label="Send">
+            →
+          </button>
+        </div>
+
+      </div>
+
+      <p class="ig-text-center ig-text-dim ig-mt-lg" style="font-size:.75rem;">
+        AI suggestions only include trusted partners on our platform.
+      </p>
+
+    </div>
+  </main>
+
+  <script src="assets/i18n.js"></script>
+  <script src="assets/supabase.js"></script>
+
+  <script>
+    // ========================================================================
+    // AI.HTML — Real AI via Supabase Edge Function (Gemini)
+    // ========================================================================
+
+    // Edge Function URL (Supabase'de oluşturduğun ai-chat function)
+    const AI_FUNCTION_URL = "https://nbkksybvrbtxubloqilj.supabase.co/functions/v1/ai-chat";
+
+    // Conversation history (son 10 mesajı tutar)
+    let conversationHistory = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+
+      const currentLang = IG.getLang();
+      document.querySelectorAll('.ig-lang-btn').forEach(btn => {
+        if (btn.dataset.lang === currentLang) btn.classList.add('active');
+        btn.addEventListener('click', () => IG.setLang(btn.dataset.lang));
+      });
+
+      // Auth kontrolü
+      try {
+        const user = await IG.auth.getUser();
+        if (!user) {
+          window.location.href = 'index.html';
+          return;
+        }
+      } catch (err) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Auto-resize textarea
+      const input = document.getElementById('chatInput');
+      input.addEventListener('input', () => {
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+
+      document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
+      document.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          input.value = chip.dataset.prompt;
+          input.focus();
+          sendMessage();
+        });
+      });
+    });
+
+    // ========================================================================
+    // MESAJ GÖNDER — Edge Function'a istek
+    // ========================================================================
+    async function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const text = input.value.trim();
+      if (!text) return;
+
+      // UI: kullanıcı mesajı
+      addMessage('user', escapeHtml(text));
+      input.value = '';
+      input.style.height = 'auto';
+
+      // Suggestion chips'leri gizle
+      const chips = document.getElementById('suggestionChips');
+      if (chips) chips.style.display = 'none';
+
+      // Loading
+      sendBtn.disabled = true;
+      const typingId = showTyping();
+
+      try {
+        // Edge Function'a istek
+        const response = await fetch(AI_FUNCTION_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Supabase anon key (Publishable key) authorization için
+            'Authorization': `Bearer ${getAnonKey()}`,
+            'apikey': getAnonKey()
+          },
+          body: JSON.stringify({
+            message: text,
+            lang: IG.getLang(),
+            conversationHistory: conversationHistory.slice(-10) // Son 10 mesaj
+          })
+        });
+
+        removeTyping(typingId);
+
+        if (!response.ok) {
+          let errorMsg = 'AI service unavailable';
+          try {
+            const errData = await response.json();
+            errorMsg = errData.error || errorMsg;
+          } catch (e) {}
+
+          addMessage('error', `⚠️ ${escapeHtml(errorMsg)}. Try browsing categories instead.`);
+          sendBtn.disabled = false;
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.response) {
+          addMessage('error', '⚠️ No response received. Please try again.');
+          sendBtn.disabled = false;
+          return;
+        }
+
+        // AI cevabını formatla (markdown link → HTML link)
+        const formattedResponse = formatAIResponse(data.response);
+
+        addMessage('assistant', formattedResponse);
+
+        // History'e ekle
+        conversationHistory.push({ role: 'user', content: text });
+        conversationHistory.push({ role: 'assistant', content: data.response });
+
+        // History'i sınırla (memory için)
+        if (conversationHistory.length > 20) {
+          conversationHistory = conversationHistory.slice(-20);
+        }
+
+      } catch (err) {
+        removeTyping(typingId);
+        console.error('AI çağrı hatası:', err);
+        addMessage('error', '⚠️ Connection error. Please check your internet and try again.');
+      }
+
+      sendBtn.disabled = false;
+      input.focus();
+    }
+
+    // ========================================================================
+    // AI cevabını formatla
+    // - Kategori isimlerini linklere çevir
+    // - Newline → <br>
+    // ========================================================================
+    function formatAIResponse(text) {
+      let formatted = escapeHtml(text);
+
+      // Newline'lar
+      formatted = formatted.replace(/\n/g, '<br>');
+
+      // Bold (markdown **text** → <strong>)
+      formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+      // Italic (markdown *text* → <em>)
+      formatted = formatted.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+      // Kategori isimlerini linklere çevir
+      const categoryLinks = {
+        'Hammam': 'category.html?cat=hammam',
+        'hammam': 'category.html?cat=hammam',
+        'Tour': 'category.html?cat=tour',
+        'tour': 'category.html?cat=tour',
+        'Tours': 'category.html?cat=tour',
+        'Transfer': 'category.html?cat=transfer',
+        'transfer': 'category.html?cat=transfer',
+        'Restaurant': 'category.html?cat=restaurant',
+        'restaurant': 'category.html?cat=restaurant',
+        'Health Tourism': 'category.html?cat=health',
+        'Nightlife': 'category.html?cat=nightlife',
+        'nightlife': 'category.html?cat=nightlife'
+      };
+
+      // Bağlantı butonu ekle (sonunda)
+      const lower = text.toLowerCase();
+      let suggestedCategory = null;
+
+      if (lower.includes('hammam') || lower.includes('spa')) suggestedCategory = 'hammam';
+      else if (lower.includes('tour') || lower.includes('sightseeing')) suggestedCategory = 'tour';
+      else if (lower.includes('transfer') || lower.includes('airport')) suggestedCategory = 'transfer';
+      else if (lower.includes('restaurant') || lower.includes('food') || lower.includes('eat')) suggestedCategory = 'restaurant';
+      else if (lower.includes('health') || lower.includes('clinic')) suggestedCategory = 'health';
+      else if (lower.includes('nightlife') || lower.includes('club') || lower.includes('bar')) suggestedCategory = 'nightlife';
+
+      if (suggestedCategory) {
+        const labels = {
+          hammam: 'View Hammams', tour: 'View Tours', transfer: 'View Transfers',
+          restaurant: 'View Restaurants', health: 'View Clinics', nightlife: 'View Nightlife'
+        };
+        formatted += `<br><br><a href="category.html?cat=${suggestedCategory}" class="ig-btn ig-btn-secondary" style="margin-top:0.5rem; display:inline-block;">${labels[suggestedCategory]} →</a>`;
+      }
+
+      return formatted;
+    }
+
+    // ========================================================================
+    // SUPABASE PUBLISHABLE KEY ALMA
+    // ========================================================================
+    function getAnonKey() {
+      // Supabase client'ından key al (supabase.js yüklendi)
+      if (typeof SUPABASE_KEY !== 'undefined') {
+        return SUPABASE_KEY;
+      }
+      console.error('SUPABASE_KEY not found');
+      return '';
+    }
+
+    // ========================================================================
+    // UI YARDIMCILARI
+    // ========================================================================
+    function addMessage(role, html) {
+      const container = document.getElementById('chatMessages');
+      const msg = document.createElement('div');
+      msg.className = 'chat-msg ' + role;
+      msg.innerHTML = html;
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function showTyping() {
+      const container = document.getElementById('chatMessages');
+      const typing = document.createElement('div');
+      typing.className = 'chat-msg assistant';
+      typing.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+      typing.style.padding = '0';
+      const id = 'typing-' + Date.now();
+      typing.id = id;
+      container.appendChild(typing);
+      container.scrollTop = container.scrollHeight;
+      return id;
+    }
+
+    function removeTyping(id) {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, c => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+      }[c]));
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a1428">
+  <title>Istanbul Guardian — Category</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%E2%9A%93%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <nav class="ig-nav">
+    <a href="index.html" class="ig-nav-brand" style="text-decoration:none;">
+      ← Istanbul <span>Guardian</span>
+    </a>
+    <div class="ig-lang-switcher">
+      <button class="ig-lang-btn" data-lang="tr">TR</button>
+      <button class="ig-lang-btn" data-lang="en">EN</button>
+      <button class="ig-lang-btn" data-lang="ar">عر</button>
+      <button class="ig-lang-btn" data-lang="ru">RU</button>
+    </div>
+  </nav>
+
+  <main class="ig-page">
+    <div class="ig-container">
+
+      <!-- Kategori başlığı -->
+      <section class="ig-mb-2xl ig-fade-in">
+        <div class="ig-overline ig-mb-sm" id="categoryEyebrow">CATEGORY</div>
+        <h1 class="ig-display ig-mb-md" id="categoryTitle">—</h1>
+        <p class="ig-text-soft" id="categoryDesc">
+          Discover trusted partners selected for our guests.
+        </p>
+      </section>
+
+      <!-- Hizmet listesi -->
+      <section id="servicesSection" class="ig-fade-in ig-fade-in-delay-1">
+        <div id="servicesContainer" class="ig-list">
+          <!-- JS ile dolacak -->
+        </div>
+
+        <!-- Boş durum -->
+        <div id="emptyState" class="ig-card ig-text-center ig-hidden" style="padding:3rem 1.5rem;">
+          <div style="font-size:3rem; margin-bottom:1rem;">🌙</div>
+          <h3 class="ig-mb-sm">No services yet</h3>
+          <p class="ig-text-soft">
+            We're adding trusted partners in this category. Check back soon.
+          </p>
+          <a href="index.html" class="ig-btn ig-btn-secondary ig-mt-lg">
+            <span data-i18n="action.back">Back</span>
+          </a>
+        </div>
+
+        <!-- Yükleniyor -->
+        <div id="loadingState" class="ig-text-center" style="padding:3rem 0;">
+          <div class="ig-loader ig-loader-large" style="margin:0 auto;"></div>
+        </div>
+      </section>
+
+      <p class="ig-text-center ig-text-dim ig-mt-2xl" style="font-size:.75rem;">
+        © 2026 Bosphorus Global
+      </p>
+
+    </div>
+  </main>
+
+  <script src="assets/i18n.js"></script>
+  <script src="assets/supabase.js"></script>
+
+  <script>
+    // ========================================================================
+    // CATEGORY.HTML — Kategori bazında hizmet listesi
+    // ========================================================================
+
+    const CATEGORY_META = {
+      hammam:     { icon: '🛁', i18nKey: 'cat.hammam' },
+      tour:       { icon: '⛵', i18nKey: 'cat.tour' },
+      transfer:   { icon: '🚐', i18nKey: 'cat.transfer' },
+      restaurant: { icon: '🍽', i18nKey: 'cat.restaurant' },
+      health:     { icon: '🏥', i18nKey: 'cat.health' },
+      nightlife:  { icon: '🌃', i18nKey: 'cat.nightlife' }
+    };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+
+      // Dil
+      const currentLang = IG.getLang();
+      document.querySelectorAll('.ig-lang-btn').forEach(btn => {
+        if (btn.dataset.lang === currentLang) btn.classList.add('active');
+        btn.addEventListener('click', () => IG.setLang(btn.dataset.lang));
+      });
+
+      // Auth kontrol
+      try {
+        const user = await IG.auth.getUser();
+        if (!user) {
+          window.location.href = 'index.html';
+          return;
+        }
+      } catch (err) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // URL'den kategori al
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('cat');
+
+      if (!category || !CATEGORY_META[category]) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Başlık
+      const meta = CATEGORY_META[category];
+      document.getElementById('categoryEyebrow').textContent = meta.icon + ' CATEGORY';
+      document.getElementById('categoryTitle').textContent = IG.t(meta.i18nKey);
+
+      // Hizmetleri yükle
+      await loadServices(category);
+    });
+
+    // ========================================================================
+    // HIZMETLERI YÜKLE
+    // ========================================================================
+    async function loadServices(category) {
+      const loadingEl = document.getElementById('loadingState');
+      const emptyEl = document.getElementById('emptyState');
+      const containerEl = document.getElementById('servicesContainer');
+      const currentLang = IG.getLang();
+
+      try {
+        const sb = await initSupabase();
+
+        // Önce o kategorideki aktif sağlayıcıları al
+        const { data: providers, error: provError } = await sb
+          .from('providers')
+          .select('id, name, slug, district, rating, total_bookings, cover_image_url, category')
+          .eq('category', category)
+          .eq('is_active', true)
+          .order('rating', { ascending: false });
+
+        if (provError) throw provError;
+
+        if (!providers || providers.length === 0) {
+          loadingEl.classList.add('ig-hidden');
+          emptyEl.classList.remove('ig-hidden');
+          return;
+        }
+
+        // Sağlayıcıların ID'lerini topla
+        const providerIds = providers.map(p => p.id);
+
+        // Bu sağlayıcıların aktif hizmetlerini al
+        const { data: services, error: svcError } = await sb
+          .from('services')
+          .select('id, provider_id, name, description, base_price, currency, duration_minutes, cover_image_url')
+          .in('provider_id', providerIds)
+          .eq('is_active', true)
+          .order('sort_order', { ascending: true });
+
+        if (svcError) throw svcError;
+
+        // Çevirileri al (varsa)
+        const serviceIds = (services || []).map(s => s.id);
+        let translations = {};
+        if (serviceIds.length > 0) {
+          const { data: trans } = await sb
+            .from('service_translations')
+            .select('service_id, name, description')
+            .in('service_id', serviceIds)
+            .eq('lang', currentLang);
+
+          if (trans) {
+            trans.forEach(t => translations[t.service_id] = t);
+          }
+        }
+
+        loadingEl.classList.add('ig-hidden');
+
+        if (!services || services.length === 0) {
+          emptyEl.classList.remove('ig-hidden');
+          return;
+        }
+
+        // Sağlayıcı bazında grupla
+        const grouped = {};
+        services.forEach(svc => {
+          if (!grouped[svc.provider_id]) grouped[svc.provider_id] = [];
+          grouped[svc.provider_id].push(svc);
+        });
+
+        // Render et
+        containerEl.innerHTML = providers
+          .filter(p => grouped[p.id] && grouped[p.id].length > 0)
+          .map(provider => renderProviderBlock(provider, grouped[provider.id], translations))
+          .join('');
+
+        // Sağlayıcısı olmayan kategori
+        if (containerEl.innerHTML === '') {
+          emptyEl.classList.remove('ig-hidden');
+        }
+
+      } catch (err) {
+        console.error('Hizmetler yüklenemedi:', err);
+        loadingEl.classList.add('ig-hidden');
+        emptyEl.classList.remove('ig-hidden');
+      }
+    }
+
+    // ========================================================================
+    // SAĞLAYICI BLOĞU RENDER ET
+    // ========================================================================
+    function renderProviderBlock(provider, services, translations) {
+      const ratingHtml = provider.rating > 0
+        ? `<span class="ig-text-gold">★ ${provider.rating.toFixed(1)}</span>`
+        : '';
+
+      const bookingsHtml = provider.total_bookings > 0
+        ? `<span class="ig-text-dim" style="font-size:.8rem;">· ${provider.total_bookings} bookings</span>`
+        : '';
+
+      return `
+        <div class="ig-card ig-mb-lg">
+
+          <div class="ig-flex ig-justify-between ig-items-center ig-mb-md">
+            <div>
+              <h3>${escapeHtml(provider.name)}</h3>
+              <div class="ig-text-soft" style="font-size:.875rem; margin-top:.25rem;">
+                ${escapeHtml(provider.district || '')} ${ratingHtml} ${bookingsHtml}
+              </div>
+            </div>
+          </div>
+
+          <div class="ig-list">
+            ${services.map(svc => renderServiceItem(svc, translations[svc.id])).join('')}
+          </div>
+
+        </div>
+      `;
+    }
+
+    // ========================================================================
+    // HİZMET KARTI
+    // ========================================================================
+    function renderServiceItem(svc, trans) {
+      const name = trans?.name || svc.name;
+      const description = trans?.description || svc.description || '';
+      const duration = svc.duration_minutes
+        ? `<span class="ig-text-dim" style="font-size:.8rem;">${svc.duration_minutes} min</span>`
+        : '';
+
+      return `
+        <a href="service.html?id=${svc.id}"
+           class="ig-card"
+           style="display:block; background:var(--ig-bg-soft); border-color:var(--ig-border-soft); padding:1rem;">
+
+          <div class="ig-flex ig-justify-between ig-items-center ig-gap-md">
+            <div style="flex:1; min-width:0;">
+              <div class="ig-flex ig-items-center ig-gap-sm">
+                <strong>${escapeHtml(name)}</strong>
+                ${duration}
+              </div>
+              ${description ? `<p class="ig-text-soft" style="font-size:.875rem; margin-top:.25rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(description)}</p>` : ''}
+            </div>
+
+            <div class="ig-text-right" style="text-align:right;">
+              <div class="ig-text-gold" style="font-weight:600;">
+                ${svc.base_price} ${svc.currency}
+              </div>
+              <div class="ig-text-gold" style="font-size:1.25rem; line-height:1;">→</div>
+            </div>
+          </div>
+        </a>
+      `;
+    }
+
+    // ========================================================================
+    // YARDIMCI
+    // ========================================================================
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, c => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+      }[c]));
+    }
+  </script>
+
+</body>
+</html>

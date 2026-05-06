@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a1428">
+  <title>Istanbul Guardian — Booking Details</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%E2%9A%93%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <nav class="ig-nav">
+    <a href="index.html" class="ig-nav-brand" style="text-decoration:none;">
+      ← Istanbul <span>Guardian</span>
+    </a>
+    <div class="ig-lang-switcher">
+      <button class="ig-lang-btn" data-lang="tr">TR</button>
+      <button class="ig-lang-btn" data-lang="en">EN</button>
+      <button class="ig-lang-btn" data-lang="ar">عر</button>
+      <button class="ig-lang-btn" data-lang="ru">RU</button>
+    </div>
+  </nav>
+
+  <main class="ig-page">
+    <div class="ig-container ig-container-sm">
+
+      <!-- Yükleniyor -->
+      <div id="loadingState" class="ig-text-center" style="padding:4rem 0;">
+        <div class="ig-loader ig-loader-large" style="margin:0 auto;"></div>
+      </div>
+
+      <!-- Hata -->
+      <div id="errorState" class="ig-card ig-text-center ig-hidden" style="padding:3rem 1.5rem;">
+        <div style="font-size:3rem; margin-bottom:1rem;">⚠️</div>
+        <h3 class="ig-mb-sm">Booking not found</h3>
+        <a href="index.html" class="ig-btn ig-btn-primary ig-mt-md">
+          <span data-i18n="action.back">Back</span>
+        </a>
+      </div>
+
+      <!-- Detay -->
+      <div id="bookingDetail" class="ig-hidden ig-fade-in">
+
+        <!-- Yeni rezervasyon başarı bandı -->
+        <div id="successBanner" class="ig-hidden ig-mb-xl" style="background:linear-gradient(135deg, rgba(95, 184, 138, 0.15), rgba(95, 184, 138, 0.05)); border:1px solid var(--ig-success); border-radius:var(--ig-radius-md); padding:1.5rem; text-align:center;">
+          <div style="font-size:2.5rem; margin-bottom:.5rem;">✓</div>
+          <h3 style="color:var(--ig-success); margin-bottom:.5rem;">Booking created!</h3>
+          <p class="ig-text-soft" style="font-size:.9rem;">
+            Complete your payment to confirm.
+          </p>
+        </div>
+
+        <!-- Booking numarası + durum -->
+        <div class="ig-flex ig-justify-between ig-items-center ig-mb-lg">
+          <div>
+            <div class="ig-overline ig-mb-xs">BOOKING</div>
+            <h2 id="bookingNo" style="font-family:var(--ig-font-display);">—</h2>
+          </div>
+          <span id="statusBadge" class="ig-badge">—</span>
+        </div>
+
+        <!-- Hizmet kartı -->
+        <div class="ig-card ig-mb-lg">
+          <div class="ig-overline ig-mb-sm">SERVICE</div>
+          <h3 id="serviceName" class="ig-mb-sm">—</h3>
+          <p class="ig-text-soft" id="providerName" style="font-size:.875rem;">—</p>
+        </div>
+
+        <!-- Detay grid -->
+        <div class="ig-card ig-mb-lg">
+
+          <div class="ig-flex ig-justify-between ig-mb-md" style="padding-bottom:1rem; border-bottom:1px solid var(--ig-border-soft);">
+            <span class="ig-text-soft" data-i18n="booking.date">Date</span>
+            <strong id="scheduledDate">—</strong>
+          </div>
+
+          <div class="ig-flex ig-justify-between ig-mb-md" style="padding-bottom:1rem; border-bottom:1px solid var(--ig-border-soft);">
+            <span class="ig-text-soft" data-i18n="booking.time">Time</span>
+            <strong id="scheduledTime">—</strong>
+          </div>
+
+          <div class="ig-flex ig-justify-between ig-mb-md" style="padding-bottom:1rem; border-bottom:1px solid var(--ig-border-soft);">
+            <span class="ig-text-soft" data-i18n="booking.persons">Persons</span>
+            <strong id="numPersons">—</strong>
+          </div>
+
+          <div id="notesRow" class="ig-mb-md ig-hidden" style="padding-bottom:1rem; border-bottom:1px solid var(--ig-border-soft);">
+            <div class="ig-text-soft ig-mb-xs" data-i18n="booking.notes">Special requests</div>
+            <p id="specialRequests" style="font-size:.9rem;">—</p>
+          </div>
+
+          <div class="ig-flex ig-justify-between ig-items-center ig-mt-md">
+            <span class="ig-text-soft" data-i18n="booking.total">Total</span>
+            <div class="ig-text-gold" style="font-family:var(--ig-font-display); font-size:1.75rem; font-weight:600;">
+              <span id="totalAmount">—</span>
+              <span id="totalCurrency" style="font-size:1rem;">—</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Ödeme durumu -->
+        <div id="paymentSection" class="ig-mb-lg ig-hidden">
+          <div class="ig-card" style="background:var(--ig-bg-soft);">
+            <div class="ig-flex ig-justify-between ig-items-center">
+              <div>
+                <div class="ig-overline ig-mb-xs">PAYMENT</div>
+                <strong id="paymentStatusText">—</strong>
+              </div>
+              <span id="paymentBadge" class="ig-badge">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aksiyonlar -->
+        <div id="actionsSection" class="ig-flex ig-flex-col ig-gap-md">
+
+          <!-- Ödemeye geç (pending_payment) -->
+          <button id="payBtn" class="ig-btn ig-btn-primary ig-btn-block ig-btn-large ig-hidden">
+            <span data-i18n="booking.pay">Pay now</span>
+            <span style="margin-left:.5rem;">→</span>
+          </button>
+
+          <!-- İptal -->
+          <button id="cancelBtn" class="ig-btn ig-btn-ghost ig-btn-block ig-hidden">
+            <span data-i18n="action.cancel">Cancel booking</span>
+          </button>
+
+          <!-- Ana sayfaya dön -->
+          <a href="index.html" class="ig-btn ig-btn-secondary ig-btn-block">
+            <span data-i18n="action.back">Back to home</span>
+          </a>
+        </div>
+
+        <!-- İletişim -->
+        <div class="ig-text-center ig-mt-2xl ig-text-dim" style="font-size:.75rem;">
+          <p>Booking confirmation sent to <span id="contactEmail">—</span></p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Loading overlay -->
+  <div id="loadingOverlay" class="ig-loading-overlay ig-hidden">
+    <div class="ig-loader ig-loader-large"></div>
+  </div>
+
+  <script src="assets/i18n.js"></script>
+  <script src="assets/supabase.js"></script>
+
+  <script>
+    // ========================================================================
+    // BOOKING-DETAIL.HTML — Rezervasyon detay sayfası
+    // ========================================================================
+
+    let currentBooking = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+
+      // Dil
+      const currentLang = IG.getLang();
+      document.querySelectorAll('.ig-lang-btn').forEach(btn => {
+        if (btn.dataset.lang === currentLang) btn.classList.add('active');
+        btn.addEventListener('click', () => IG.setLang(btn.dataset.lang));
+      });
+
+      // Auth
+      try {
+        const user = await IG.auth.getUser();
+        if (!user) {
+          window.location.href = 'index.html';
+          return;
+        }
+      } catch (err) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // URL'den booking ID
+      const urlParams = new URLSearchParams(window.location.search);
+      const bookingId = urlParams.get('id');
+      const isNew = urlParams.get('new') === '1';
+
+      if (!bookingId) {
+        showError();
+        return;
+      }
+
+      // Yeni rezervasyon ise success banner göster
+      if (isNew) {
+        document.getElementById('successBanner').classList.remove('ig-hidden');
+      }
+
+      await loadBooking(bookingId);
+    });
+
+    // ========================================================================
+    // REZERVASYONU YÜKLE
+    // ========================================================================
+    async function loadBooking(bookingId) {
+      const loadingEl = document.getElementById('loadingState');
+      const detailEl = document.getElementById('bookingDetail');
+      const currentLang = IG.getLang();
+
+      try {
+        const sb = await initSupabase();
+
+        const { data: booking, error } = await sb
+          .from('bookings')
+          .select(`
+            id, booking_no, scheduled_at, num_persons, special_requests,
+            service_price, total_amount, currency,
+            status, payment_status, contact_email, contact_phone,
+            services ( id, name ),
+            providers ( id, name )
+          `)
+          .eq('id', bookingId)
+          .single();
+
+        if (error || !booking) {
+          showError();
+          return;
+        }
+
+        currentBooking = booking;
+
+        // Çeviriler
+        const [svcTrans, provTrans] = await Promise.all([
+          sb.from('service_translations')
+            .select('name')
+            .eq('service_id', booking.services.id)
+            .eq('lang', currentLang)
+            .maybeSingle(),
+          sb.from('provider_translations')
+            .select('name')
+            .eq('provider_id', booking.providers.id)
+            .eq('lang', currentLang)
+            .maybeSingle()
+        ]);
+
+        renderBooking(booking, svcTrans.data, provTrans.data);
+
+        loadingEl.classList.add('ig-hidden');
+        detailEl.classList.remove('ig-hidden');
+
+      } catch (err) {
+        console.error('Rezervasyon yüklenemedi:', err);
+        showError();
+      }
+    }
+
+    // ========================================================================
+    // RENDER
+    // ========================================================================
+    function renderBooking(b, svcTrans, provTrans) {
+      const scheduled = new Date(b.scheduled_at);
+
+      // Numara + durum
+      document.getElementById('bookingNo').textContent = `#${b.booking_no}`;
+
+      const statusBadge = document.getElementById('statusBadge');
+      statusBadge.textContent = IG.t('status.' + b.status);
+      statusBadge.className = 'ig-badge ig-badge-' + statusBadgeClass(b.status);
+
+      // Hizmet
+      document.getElementById('serviceName').textContent =
+        svcTrans?.name || b.services?.name || '—';
+      document.getElementById('providerName').textContent =
+        provTrans?.name || b.providers?.name || '—';
+
+      // Tarih/saat
+      document.getElementById('scheduledDate').textContent =
+        scheduled.toLocaleDateString(IG.getLang(), {
+          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+      document.getElementById('scheduledTime').textContent =
+        scheduled.toLocaleTimeString(IG.getLang(), { hour: '2-digit', minute: '2-digit' });
+
+      // Kişi sayısı
+      document.getElementById('numPersons').textContent = b.num_persons;
+
+      // Notlar
+      if (b.special_requests) {
+        document.getElementById('specialRequests').textContent = b.special_requests;
+        document.getElementById('notesRow').classList.remove('ig-hidden');
+      }
+
+      // Toplam
+      document.getElementById('totalAmount').textContent = parseFloat(b.total_amount).toFixed(2);
+      document.getElementById('totalCurrency').textContent = b.currency;
+
+      // Ödeme bilgisi
+      if (b.payment_status && b.payment_status !== 'pending') {
+        const paySection = document.getElementById('paymentSection');
+        document.getElementById('paymentStatusText').textContent = paymentStatusLabel(b.payment_status);
+        const payBadge = document.getElementById('paymentBadge');
+        payBadge.textContent = b.payment_status;
+        payBadge.className = 'ig-badge ig-badge-' + paymentBadgeClass(b.payment_status);
+        paySection.classList.remove('ig-hidden');
+      }
+
+      // Email
+      document.getElementById('contactEmail').textContent = b.contact_email || '—';
+
+      // Aksiyonlar
+      setupActions(b);
+    }
+
+    // ========================================================================
+    // AKSİYONLAR
+    // ========================================================================
+    function setupActions(b) {
+      const payBtn = document.getElementById('payBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+
+      // Ödemeye geç (sadece pending_payment durumunda)
+      if (b.status === 'pending_payment' && b.payment_status === 'pending') {
+        payBtn.classList.remove('ig-hidden');
+        payBtn.addEventListener('click', handlePayment);
+      }
+
+      // İptal et (pending_payment veya confirmed durumunda)
+      if (['pending_payment', 'confirmed'].includes(b.status)) {
+        cancelBtn.classList.remove('ig-hidden');
+        cancelBtn.addEventListener('click', handleCancel);
+      }
+    }
+
+    // ========================================================================
+    // ÖDEME (Hafta 3'te tam çalışacak)
+    // ========================================================================
+    async function handlePayment() {
+      // PayTR Edge Function entegrasyonu Hafta 3'te eklenecek
+      alert(
+        'Payment integration coming soon (Week 3).\n\n' +
+        'Your booking is recorded. Please contact your hotel reception ' +
+        'to complete payment manually for testing.'
+      );
+    }
+
+    // ========================================================================
+    // İPTAL
+    // ========================================================================
+    async function handleCancel() {
+      const reason = prompt('Cancellation reason (optional):');
+      if (reason === null) return; // kullanıcı vazgeçti
+
+      const confirmed = confirm('Cancel this booking?\nThis action cannot be undone.');
+      if (!confirmed) return;
+
+      document.getElementById('loadingOverlay').classList.remove('ig-hidden');
+
+      try {
+        await IG.rpc('update_booking_status', {
+          p_booking_id: currentBooking.id,
+          p_new_status: 'cancelled',
+          p_reason: reason || 'Cancelled by guest'
+        });
+
+        // Yenile
+        window.location.reload();
+
+      } catch (err) {
+        document.getElementById('loadingOverlay').classList.add('ig-hidden');
+        console.error('İptal hatası:', err);
+        alert('Cancellation failed: ' + (err.message || 'Unknown error'));
+      }
+    }
+
+    // ========================================================================
+    // YARDIMCI
+    // ========================================================================
+    function showError() {
+      document.getElementById('loadingState').classList.add('ig-hidden');
+      document.getElementById('errorState').classList.remove('ig-hidden');
+    }
+
+    function statusBadgeClass(status) {
+      switch(status) {
+        case 'confirmed':
+        case 'completed':       return 'success';
+        case 'cancelled':
+        case 'no_show':
+        case 'refunded':        return 'danger';
+        case 'pending_payment':
+        case 'in_progress':     return 'warning';
+        default:                return '';
+      }
+    }
+
+    function paymentBadgeClass(status) {
+      switch(status) {
+        case 'paid':            return 'success';
+        case 'failed':
+        case 'refunded':        return 'danger';
+        default:                return 'warning';
+      }
+    }
+
+    function paymentStatusLabel(status) {
+      const labels = {
+        pending: 'Awaiting payment',
+        paid: 'Paid',
+        failed: 'Payment failed',
+        refunded: 'Refunded',
+        partial_refund: 'Partial refund'
+      };
+      return labels[status] || status;
+    }
+  </script>
+
+</body>
+</html>
